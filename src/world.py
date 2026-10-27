@@ -6,10 +6,6 @@ WORLD_WIDTH = window.WINDOW_WIDTH * 2
 WORLD_HEIGHT = window.WINDOW_HEIGHT
 
 class World(object):
-	background = pygame.Surface
-	width = int
-	height = int
-
 	def __init__(self):
 		self.background = pygame.image.load('background.png').convert()
 		self.width = WORLD_WIDTH

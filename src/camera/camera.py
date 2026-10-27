@@ -1,1 +1,0 @@
-# Controls the camera view

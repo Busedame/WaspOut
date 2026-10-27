@@ -1,0 +1,25 @@
+Camera scrolling:
+- When player is 20 % close to the side, move the camera to the side with the player. Until it reaches end, then camera won't move anymore, only player.
+
+x -> width - this is the only dynamic one
+y -> height - this is static, declared once to place an object in the world, does not move for now.
+
+Window position
+- Static values - window size (x_width, x_height).
+- Coordinates (-x and x) should always show where the window starts and ends on the x-axis.
+
+World position
+- Where in the world are the different objects (x, y)
+
+Player position
+- Where in the world is the player (x, y), 
+
+Camera position
+- Start position: x = 320, y = 240.
+- y is constant, camera not moving up or down.
+
+Hvis window er 0, 640 (-x og x)
+Player flytter seg til 700 (x)
+Nå er window også 60, 700 (-x og x)
+Camera er også samme koordinater?
+World view er 700 (x), fordi man ser det i relasjon til hele verden
