@@ -2,6 +2,7 @@ import pygame
 from entity import Entity
 from background import Background
 from props import Props
+from camera import Camera
 
 # Window width and height
 WINDOW_WIDTH = 640
@@ -12,13 +13,24 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Wasp out!')
 
 # Initialize player instance
-player = Entity('Player', 200, 350, 3)
+player = Entity('Player', 200, 300, 3)
 
 # Initialize background instance
 background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
 
 # Initialize props (Temp, should be initialized as an array)
 window = Props('window_tmp', 200, 200, 0.5)
+
+# Initialize camera
+camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+
+print ('BACKGROUND')
+print('center: ', background.rect.center)
+print('x: ', background.rect.x, 'y: ', background.rect.y, 'width: ', background.rect.w, 'height: ', background.rect.h)
+
+print ('CAMERA')
+print('center: ', camera.rect.center)
+print('x: ', camera.rect.x, 'y: ', camera.rect.y, 'width: ', camera.rect.w, 'height: ', camera.rect.h)
 
 # Framerate calculation
 dt = 0

@@ -23,3 +23,8 @@ Player flytter seg til 700 (x)
 Nå er window også 60, 700 (-x og x)
 Camera er også samme koordinater?
 World view er 700 (x), fordi man ser det i relasjon til hele verden
+
+
+Når spiller er 20 % nærme én av kantene -> flytt kameraposisjonen.
+
+Kameraposisjonen starter midt på første vindu.

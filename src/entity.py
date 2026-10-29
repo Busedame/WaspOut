@@ -20,7 +20,7 @@ class Entity(pygame.sprite.Sprite):
 	
 	def draw(self, screen):
 		screen.blit(pygame.transform.flip(self.img, self.flip, False), self.rect)
-	
+
 	def move(self):
 		dx = 0
 
