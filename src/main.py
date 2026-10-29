@@ -17,7 +17,7 @@ player = Entity('Player', 200, 350, 3)
 # Initialize background instance
 background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
 
-# Initialize props
+# Initialize props (Temp, should be initialized as an array)
 window = Props('window_tmp', 200, 200, 0.5)
 
 # Framerate calculation
@@ -38,6 +38,9 @@ while running:
 
 	# Render all images
 	pygame.display.flip()
+
+	#print('player x: ', player.rect.x)
+	#print('player y: ', player.rect.y)
 
 	# Check for events
 	for event in pygame.event.get():

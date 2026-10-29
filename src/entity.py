@@ -35,3 +35,10 @@ class Entity(pygame.sprite.Sprite):
 			self.direction = 1
 
 		self.rect.x += dx * self.direction
+
+		# Blocks player from moving out of screen, left side
+		if self.rect.x < 0:
+			self.rect.x = 0
+		# Blocks player from moving out of screen, right side
+		if self.rect.x > 640 - self.rect.w:
+			self.rect.x = 640 - self.rect.w
