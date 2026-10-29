@@ -1,17 +1,29 @@
 import pygame
-from abc import ABC, abstractmethod
 
 # Parent class to all entities -> can be player, enemy or just a static object.
-
-class Entity(ABC):
-	def __init__(self, x: float, y: float, surface: pygame.Surface):
-		self.world_pos = pygame.Vector2(x, y)
-		self.image = surface
-		self.rect = self.image.get_rect(topleft=(x, y))
+class Entity(pygame.sprite.Sprite):
+	def __init__(self, char_type, x, y, speed):
+		self.img = pygame.image.load(f'img/{char_type}/Idle/0.png')
+		self.rect = self.img.get_rect()
+		self.rect.center = (x, y)
+		self.speed = speed
+		self.direction = 1 # -1 for left, 1 for right
+		self.flip = False
 	
-	@abstractmethod
-	def draw(self):
-		
+	def draw(self, screen):
+		screen.blit(pygame.transform.flip(self.img, self.flip, False), self.rect)
+	
+	def move(self, move_right, move_left):
+		dx = 0
 
-def init():
-	return Entity(2, 3, 'Sprite-test.gif')
+		if move_left:
+			dx = self.speed
+			self.flip = False
+			self.direction = -1
+	
+		if move_right:
+			dx = self.speed
+			self.flip = True
+			self.direction = 1
+
+		self.rect.x += dx * self.direction
