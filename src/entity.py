@@ -11,21 +11,25 @@ class Entity(pygame.sprite.Sprite):
 		self.rect = self.img.get_rect()
 		self.rect.center = (x, y)
 		self.speed = speed
+
+		# Moving directions
+		self.moving_right = False
+		self.moving_left = False
 		self.direction = 1 # -1 for left, 1 for right
 		self.flip = False
 	
 	def draw(self, screen):
 		screen.blit(pygame.transform.flip(self.img, self.flip, False), self.rect)
 	
-	def move(self, move_right, move_left):
+	def move(self):
 		dx = 0
 
-		if move_left:
+		if self.moving_left:
 			dx = self.speed
 			self.flip = False
 			self.direction = -1
 	
-		if move_right:
+		if self.moving_right:
 			dx = self.speed
 			self.flip = True
 			self.direction = 1
