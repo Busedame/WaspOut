@@ -1,5 +1,6 @@
 import pygame
 from entity import Entity
+from background import Background
 
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
@@ -9,9 +10,12 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Wasp out!')
 
 # Initialize player instance
-player = Entity('Player', 200, 200, 5)
+player = Entity('Player', 200, 350, 3)
 moving_right = False
 moving_left = False
+
+# Initialize background instance
+background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
 
 # Framerate calculation
 dt = 0
@@ -23,7 +27,7 @@ running = True
 while running:
 
 	dt = clock.tick(60) / 1000
-	screen.fill('white')
+	background.draw(screen)
 	player.move(moving_right, moving_left)
 	player.draw(screen)
 
