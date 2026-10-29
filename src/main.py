@@ -1,6 +1,7 @@
 import pygame
 from entity import Entity
 from background import Background
+from props import Props
 
 # Window width and height
 WINDOW_WIDTH = 640
@@ -16,6 +17,9 @@ player = Entity('Player', 200, 350, 3)
 # Initialize background instance
 background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
 
+# Initialize props
+window = Props('window_tmp', 200, 200, 0.5)
+
 # Framerate calculation
 dt = 0
 clock = pygame.time.Clock()
@@ -25,11 +29,14 @@ running = True
 
 while running:
 
-	# Draw the background and player
+	# Draw the background and props
 	background.draw(screen)
+	window.draw(screen)
+
+	# Draw the player
 	player.draw(screen)
 
-	# Render the images
+	# Render all images
 	pygame.display.flip()
 
 	# Check for events
