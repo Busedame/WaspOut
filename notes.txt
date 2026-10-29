@@ -28,3 +28,6 @@ World view er 700 (x), fordi man ser det i relasjon til hele verden
 Når spiller er 20 % nærme én av kantene -> flytt kameraposisjonen.
 
 Kameraposisjonen starter midt på første vindu.
+Den kan maksimalt bevege seg til midten av andre vindu.
+
+Hele

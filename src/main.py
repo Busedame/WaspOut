@@ -3,6 +3,7 @@ from entity import Entity
 from background import Background
 from props import Props
 from camera import Camera
+from debug import debug
 
 # Window width and height
 WINDOW_WIDTH = 640
@@ -24,14 +25,6 @@ window = Props('window_tmp', 200, 200, 0.5)
 # Initialize camera
 camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-print ('BACKGROUND')
-print('center: ', background.rect.center)
-print('x: ', background.rect.x, 'y: ', background.rect.y, 'width: ', background.rect.w, 'height: ', background.rect.h)
-
-print ('CAMERA')
-print('center: ', camera.rect.center)
-print('x: ', camera.rect.x, 'y: ', camera.rect.y, 'width: ', camera.rect.w, 'height: ', camera.rect.h)
-
 # Framerate calculation
 dt = 0
 clock = pygame.time.Clock()
@@ -50,9 +43,6 @@ while running:
 
 	# Render all images
 	pygame.display.flip()
-
-	#print('player x: ', player.rect.x)
-	#print('player y: ', player.rect.y)
 
 	# Check for events
 	for event in pygame.event.get():
@@ -79,5 +69,8 @@ while running:
 
 	# Move the player
 	player.move()
+
+	# DEBUG PRINTS 
+	debug(background, camera, player, window)
 
 pygame.quit()
