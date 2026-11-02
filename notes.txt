@@ -1,33 +1,36 @@
-Camera scrolling:
-- When player is 20 % close to the side, move the camera to the side with the player. Until it reaches end, then camera won't move anymore, only player.
+CAMERA MOVEMENT:
 
-x -> width - this is the only dynamic one
-y -> height - this is static, declared once to place an object in the world, does not move for now.
+Camera only moves when player is 20 % close to either edge, AND there is more world to explore.
+In order to draw the different props in the world, the camera offset is subtracted from
+the prop original positions.
 
-Window position
-- Static values - window size (x_width, x_height).
-- Coordinates (-x and x) should always show where the window starts and ends on the x-axis.
+E.g.:
 
-World position
-- Where in the world are the different objects (x, y)
+background.rect.x - camera.offset_x
 
-Player position
-- Where in the world is the player (x, y), 
+This meaning:
+Left edge of background - how many pixels the camera has scrolled = where to draw background
 
-Camera position
-- Start position: x = 320, y = 240.
-- y is constant, camera not moving up or down.
+This would take the background x position (left edge of background) and subtract the camera
+offset.
+Let's say background started at position 0. Now camera has moved 200 pixels to the right.
+Then background x position will be drawn at x = -200, so the background appears to move to the left.
 
-Hvis window er 0, 640 (-x og x)
-Player flytter seg til 700 (x)
-Nå er window også 60, 700 (-x og x)
-Camera er også samme koordinater?
-World view er 700 (x), fordi man ser det i relasjon til hele verden
+Another important point is the difference between player world position and player screen position.
 
+For simplicity, I have made the world pretty straightforward.
 
-Når spiller er 20 % nærme én av kantene -> flytt kameraposisjonen.
+My window is:
+640 x 480
+And my world is:
+1280 x 480
 
-Kameraposisjonen starter midt på første vindu.
-Den kan maksimalt bevege seg til midten av andre vindu.
+So the world is twice as big as the window.
 
-Hele
+If player is at position x = 800, this means IN THE WORLD.
+Cause the player can't be at position x = 800 on the screen, because the window is only 640
+pixels wide.
+
+This means that the real position of the player on the window will be:
+player_window_pos_x = player_world_pos_x - camera.offset_x
+

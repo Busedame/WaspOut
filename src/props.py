@@ -7,5 +7,6 @@ class Props(object):
 		self.rect = self.img.get_rect()
 		self.rect.center = (x, y)
 	
-	def draw(self, screen):
-		screen.blit(self.img, self.rect)
+	def draw(self, screen, camera):
+		# Blits prop on screen relative to camera position
+		screen.blit(self.img, (self.rect.x - camera.offset_x, self.rect.y))
