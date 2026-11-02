@@ -1,6 +1,6 @@
-# A very simple temporary Makefile.
-
+# A very simple temporary Makefile for a Linux environment.
 # Set up and run virtual environment, and execute main.py.
+
 all: 
 	python3 -m venv venv
 	./venv/bin/pip install -r requirements.txt
