@@ -4,7 +4,7 @@ from background import Background
 from props import Props
 from camera import Camera
 
-def debug(background: Background, camera: Camera, player: Entity, window1: Props, window2: Props):
+def debug(background: Background, camera: Camera, player: Entity, enemy: Entity, window1: Props, window2: Props):
 
 	# STATIC COMPONENTS
 	print ('BACKGROUND')
@@ -29,6 +29,10 @@ def debug(background: Background, camera: Camera, player: Entity, window1: Props
 	print('center: ', player.rect.center)
 	print('x: ', player.rect.x, 'y: ', player.rect.y, 'width: ', player.rect.w, 'height: ', player.rect.h)
 
+	print ('ENEMY')
+	print('center: ', enemy.rect.center)
+	print('x: ', enemy.rect.x, 'y: ', enemy.rect.y, 'width: ', enemy.rect.w, 'height: ', enemy.rect.h)
+
 	print('CAMERA MOVEMENT')
 	print('Camera offset x: ', camera.offset_x)
 	print('Camera left margin: ', camera.player_margin_left)
@@ -37,3 +41,4 @@ def debug(background: Background, camera: Camera, player: Entity, window1: Props
 	print('Background x: ', background.rect.x - camera.offset_x)
 	print('Window1 x: ', window1.rect.x - camera.offset_x)
 	print('Window2 x: ', window2.rect.x - camera.offset_x)
+	print('Enemy x: ', enemy.rect.x - camera.offset_x)

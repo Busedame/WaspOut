@@ -10,11 +10,18 @@ WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
 # Window init and settings
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption('Wasp out!')
 
+# Start text (temp just for fun)
+press_space = Props('press_space', 320, 330, 1)
+logo = Props('logo', 420, 200, 1)
+
 # Initialize player instance
-player = Entity('Player', 200, 300, 3)
+player = Entity('Player', 200, 300, 3, 150)
+
+# Initialize enemy instance
+enemy = Entity('Enemy', 950, 150, 3, 200)
 
 # Initialize background instance
 background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
@@ -33,6 +40,25 @@ clock = pygame.time.Clock()
 # Running the game loop
 running = True
 
+intro = True
+
+while intro:
+	background.draw(screen, camera)
+	window1.draw(screen, camera)
+	logo.draw(screen, camera)
+	press_space.draw(screen, camera)
+	
+	# Render all images
+	pygame.display.flip()
+
+	for event in pygame.event.get():
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE:
+				intro = False
+				running = False
+			if event.key == pygame.K_SPACE:
+				intro = False
+
 while running:
 
 	# Draw the background and props
@@ -42,6 +68,9 @@ while running:
 
 	# Draw the player
 	player.draw(screen, camera)
+
+	# Draw the enemy
+	enemy.draw(screen, camera)
 
 	# Render all images
 	pygame.display.flip()
@@ -76,6 +105,6 @@ while running:
 	camera.move()
 
 	# DEBUG PRINTS 
-	debug(background, camera, player, window1, window2)
+	debug(background, camera, player, enemy, window1, window2)
 
 pygame.quit()

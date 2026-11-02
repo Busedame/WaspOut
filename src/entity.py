@@ -2,32 +2,42 @@ import pygame
 
 # Animation class -> currently hardcoded for entities.
 class Animation(object):
-	def __init__(self, char_type, motion_type, frames, speed):
-		self.speed = speed
-		self.update_time = pygame.time.get_ticks()
-		self.animation_list = []
-		self.frame_index = 0
+	def __init__(self, char_type, motion_type, frames, cooldown):
+
+		self.cooldown = cooldown # How long is the cooldown between frame change
+		self.update_time = pygame.time.get_ticks() # Keep track on time to check cooldown
+		self.animation_list = [] # Stores each animation frame
+		self.frame_index = 0 # Current displayed frame
+
+		# Stores all frames in animation list
 		for i in range(frames):
 			image = pygame.image.load(f'img/Entity/{char_type}/{motion_type}/{i}.png')
 			self.animation_list.append(image)
+		
+		# Initializes image to be first frame of animation list
 		self.img = self.animation_list[self.frame_index]
 	
 	def update(self):
-		# Update image depending on current frame
+
+		# Update image depending on current animation frame
 		self.img = self.animation_list[self.frame_index]
-		# Check if enough time has passed since last update
-		if pygame.time.get_ticks() - self.update_time > self.speed:
+
+		# Check if enough time has passed since last update, and in that case update to next frame.
+		if pygame.time.get_ticks() - self.update_time > self.cooldown:
 			self.update_time = pygame.time.get_ticks()
 			self.frame_index += 1
+		
+		# Resets animation if reached end of animation list.
 		if self.frame_index >= len(self.animation_list):
 			self.frame_index = 0
 
+# Player or enemy class
 class Entity(pygame.sprite.Sprite):
-	def __init__(self, char_type, x, y, speed):
+	def __init__(self, char_type, x, y, speed, cooldown):
 	
 		# Animation
-		self.animate_idle = Animation(char_type, 'Idle', 3, 150)
-		self.animate_move = Animation(char_type, 'Move', 2, 200)
+		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
+		self.animate_move = Animation(char_type, 'Move', 2, cooldown)
 
 		# Rectangle size and speed
 		self.rect = self.animate_idle.img.get_rect()
