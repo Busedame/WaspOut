@@ -4,6 +4,7 @@ import pygame
 class Animation(object):
 	def __init__(self, char_type, motion_type, frames, cooldown):
 
+		self.frames = frames # How many frames for this animation
 		self.cooldown = cooldown # How long is the cooldown between frame change
 		self.update_time = pygame.time.get_ticks() # Keep track on time to check cooldown
 		self.animation_list = [] # Stores each animation frame
@@ -52,18 +53,16 @@ class Entity(pygame.sprite.Sprite):
 
 	def draw(self, screen, camera):
 
-		# Update animations
-		self.animate_idle.update()
-		self.animate_move.update()
-
 		# Blit entity on screen relative to camera position:
 	
 		# Move image -> flips image depending on if it's moving left or right
 		if self.moving_right or self.moving_left:
+			self.animate_move.update()
 			screen.blit(pygame.transform.flip(self.animate_move.img, self.flip, False), (self.rect.x - camera.offset_x, self.rect.y))
 	
 		# Idle image
 		else:
+			self.animate_idle.update()
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
 

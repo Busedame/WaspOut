@@ -34,3 +34,6 @@ pixels wide.
 This means that the real position of the player on the window will be:
 player_window_pos_x = player_world_pos_x - camera.offset_x
 
+
+LEVEL 1:
+

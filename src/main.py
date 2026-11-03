@@ -10,7 +10,7 @@ WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
 # Window init and settings
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Wasp out!')
 
 # Start text (temp just for fun)
@@ -29,6 +29,7 @@ background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
 # Initialize props (Temp, should be initialized as an array)
 window1 = Props('window_tmp', 200, 200, 0.5)
 window2 = Props('window_tmp', 900, 200, 0.5)
+cup = Props('cup', 250, 280, 1)
 
 # Initialize camera
 camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, player)
@@ -37,9 +38,8 @@ camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, player)
 dt = 0
 clock = pygame.time.Clock()
 
-# Running the game loop
+# For running the intro and game loop
 running = True
-
 intro = True
 
 while intro:
@@ -47,7 +47,7 @@ while intro:
 	window1.draw(screen, camera)
 	logo.draw(screen, camera)
 	press_space.draw(screen, camera)
-	
+
 	# Render all images
 	pygame.display.flip()
 
@@ -65,6 +65,7 @@ while running:
 	background.draw(screen, camera)
 	window1.draw(screen, camera)
 	window2.draw(screen, camera)
+	cup.draw(screen, camera)
 
 	# Draw the player
 	player.draw(screen, camera)
