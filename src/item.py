@@ -1,13 +1,11 @@
 import pygame
+from sprite import Sprite
 
-class Item(pygame.sprite.Sprite):
+# Item child class -> inherits from Sprite class
+class Item(Sprite):
 	def __init__(self, item_name, x, y, scalar, player):
-		super().__init__()
+		super().__init__(f'img/Items/{item_name}.png', x, y, scalar)
 
-		img = pygame.image.load(f'img/Items/{item_name}.png')
-		self.image = pygame.transform.scale(img, (int(img.get_width() * scalar), (int(img.get_height() * scalar))))
-		self.rect = self.image.get_rect()
-		self.rect.center = (x, y)
 		self.name = item_name
 
 		self.picked_up = False
@@ -15,8 +13,8 @@ class Item(pygame.sprite.Sprite):
 	
 	def draw(self, screen, camera):
 		# Blits prop on screen relative to camera position
-		if self.picked_up == False:
-			screen.blit(self.image, (self.rect.x - camera.offset_x, self.rect.y))
+		if not self.picked_up:
+			super().draw(screen, camera)
 	
 	def action(self, action_type):
 		if action_type == 'pick up':
@@ -24,4 +22,4 @@ class Item(pygame.sprite.Sprite):
 			print(f'player picked up {self.name}')
 		elif action_type == 'drop':
 			self.picked_up = False
-			self.rect.midbottom = (self.player.rect.centerx, self.player.rect.centerx)
+			self.rect.midbottom = (self.player.rect.centerx, self.player.rect.bottom)

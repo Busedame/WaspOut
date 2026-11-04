@@ -1,7 +1,7 @@
 import pygame
-from entity import Player, Enemy
+from objects import Sprites, Entities
+from object_groups import ObjectGroups
 from camera import Camera
-from sprites import Sprites, SpriteGroups
 from debug import debug
 
 # Window width and height
@@ -12,13 +12,16 @@ WINDOW_HEIGHT = 480
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Wasp out!')
 
-# Initialize world and sprite groups
-sprites = Sprites(WINDOW_WIDTH, WINDOW_HEIGHT)
-groups = SpriteGroups(sprites)
+# Initialize world
+entities = Entities(WINDOW_WIDTH, WINDOW_HEIGHT)
+sprites = Sprites(WINDOW_WIDTH, WINDOW_HEIGHT, entities.player)
+
+# Initialize groups
+groups = ObjectGroups(sprites, entities)
 
 # Reassign player and enemy to separate variables for easier accessibility
-player = sprites.player
-enemy = sprites.enemy
+player = entities.player
+enemy = entities.enemy
 
 # Initialize camera
 camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, player)
@@ -31,6 +34,7 @@ clock = pygame.time.Clock()
 running = True
 intro = True
 
+# Game intro
 while intro:
 
 	# Draw all intro images
@@ -46,7 +50,11 @@ while intro:
 				running = False
 			if event.key == pygame.K_SPACE:
 				intro = False
+	
+	# Caps the runtime speed to not kill CPU
+	clock.tick(60)
 
+# Main loop
 while running:
 
 	# Draw background, items and props
@@ -93,6 +101,6 @@ while running:
 	camera.move()
 
 	# DEBUG PRINTS 
-	#debug(background, camera, player, enemy, window1, window2, cup)
+	debug(entities, sprites, camera)
 
 pygame.quit()
