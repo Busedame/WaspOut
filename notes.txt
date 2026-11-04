@@ -36,4 +36,66 @@ player_window_pos_x = player_world_pos_x - camera.offset_x
 
 
 LEVEL 1:
+- Grab a mug
+- Grab a piece of paper
+- Go to wasp
+- Bring to window
+- Open window
 
+Overview of whole house - two long floors.
+Alternate with x between full house view and close view.
+Only windows upstairs.
+
+A staircase connects the two floors.
+Depending on which floor player is in, the zoom will zoom in on that little "world".
+
+This means player is either in world 1 or world 2.
+If zoomed out, world 1 is rendered on upper floor and world 2 is rendered on downstairs floor.
+
+So upstairs is rendered on top of house.
+
+So the layers would be like this:
+1. Background
+2. upstairs / downstairs
+3. House (containing upstairs and downstairs)
+
+OWN CLASS WITH ITEMS, SEPARATE FROM PROPS!
+Background will be the base background - changing depending on close or far view.
+Props will only be static objects in the world.
+Items will be interactive objects.
+
+INVENTORY OF ITEMS:
+- A player can pick up an item -> stored in an inventory of items.
+- The item then stops rendering on the screen, and is placed in player's inventory.
+- Maybe it will be rendered on the screen (key I) bottom right corner.
+- Actions with the inventory items can be: Put down or use
+
+EXAMPLES OF ITEMS:
+- Mug (to trap wasp)
+- Paper (to trap wasp)
+
+- Dinner (to lure wasp for an amount of time)
+- Cola (to lure wasp for an amount of time)
+
+- Door (close -> to trap wasp in a room)
+- Window (open -> to let wasp out)
+
+INTERACTIONS:
+- w for going up stairs
+- s for going down stairs
+- i to open inventory
+- 1, 2, 3 for choosing from inventory -> u for use, y for drop down
+- (ESC to exit inventory)
+
+SPRITE GROUPS:
+- Props -> upstairs
+- Props -> downstairs
+- Rendered items
+- Inventory-items
+
+The inventory items could be just un-rendered and keep
+their original position, but if used/dropped down, THEN get
+the x/y coordinates of player, and do action there.
+
+assets = object containing pygame.sprite.Group (one for items, one for props)
+items = object inheriting from pygame.sprite.Group -> containing several pygame.sprite.Sprite

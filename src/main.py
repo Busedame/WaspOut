@@ -1,8 +1,7 @@
 import pygame
-from entity import Entity
-from background import Background
-from props import Props
+from entity import Player, Enemy
 from camera import Camera
+from sprites import Sprites, SpriteGroups
 from debug import debug
 
 # Window width and height
@@ -13,23 +12,13 @@ WINDOW_HEIGHT = 480
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Wasp out!')
 
-# Start text (temp just for fun)
-press_space = Props('press_space', 320, 330, 1)
-logo = Props('logo', 420, 200, 1)
+# Initialize world and sprite groups
+sprites = Sprites(WINDOW_WIDTH, WINDOW_HEIGHT)
+groups = SpriteGroups(sprites)
 
-# Initialize player instance
-player = Entity('Player', 200, 300, 3, 150)
-
-# Initialize enemy instance
-enemy = Entity('Enemy', 950, 150, 3, 200)
-
-# Initialize background instance
-background = Background(WINDOW_WIDTH, WINDOW_HEIGHT / 2)
-
-# Initialize props (Temp, should be initialized as an array)
-window1 = Props('window_tmp', 200, 200, 0.5)
-window2 = Props('window_tmp', 900, 200, 0.5)
-cup = Props('cup', 250, 280, 1)
+# Reassign player and enemy to separate variables for easier accessibility
+player = sprites.player
+enemy = sprites.enemy
 
 # Initialize camera
 camera = Camera(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, player)
@@ -43,12 +32,11 @@ running = True
 intro = True
 
 while intro:
-	background.draw(screen, camera)
-	window1.draw(screen, camera)
-	logo.draw(screen, camera)
-	press_space.draw(screen, camera)
 
-	# Render all images
+	# Draw all intro images
+	groups.draw(screen, camera, groups.intro)
+
+	# Render all intro images
 	pygame.display.flip()
 
 	for event in pygame.event.get():
@@ -61,11 +49,8 @@ while intro:
 
 while running:
 
-	# Draw the background and props
-	background.draw(screen, camera)
-	window1.draw(screen, camera)
-	window2.draw(screen, camera)
-	cup.draw(screen, camera)
+	# Draw background, items and props
+	groups.draw(screen, camera, groups.rendered)
 
 	# Draw the player
 	player.draw(screen, camera)
@@ -83,9 +68,11 @@ while running:
 			running = False
 		
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_d:
+			if event.key == pygame.K_w:
+				player.is_interacting = True
+			elif event.key == pygame.K_d and player.is_interacting == False:
 				player.moving_right = True
-			if event.key == pygame.K_a:
+			elif event.key == pygame.K_a and player.is_interacting == False:
 				player.moving_left = True
 			if event.key == pygame.K_ESCAPE:
 				running = False
@@ -95,7 +82,7 @@ while running:
 				player.moving_right = False
 			if event.key == pygame.K_a:
 				player.moving_left = False
-	
+
 	# Get delta time
 	dt = clock.tick(60) / 1000
 
@@ -106,6 +93,6 @@ while running:
 	camera.move()
 
 	# DEBUG PRINTS 
-	debug(background, camera, player, enemy, window1, window2)
+	#debug(background, camera, player, enemy, window1, window2, cup)
 
 pygame.quit()

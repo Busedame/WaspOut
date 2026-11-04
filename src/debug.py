@@ -1,10 +1,11 @@
 import pygame
 from entity import Entity
 from background import Background
-from props import Props
+from props import Prop
 from camera import Camera
+from item import Item
 
-def debug(background: Background, camera: Camera, player: Entity, enemy: Entity, window1: Props, window2: Props):
+def debug(background: Background, camera: Camera, player: Entity, enemy: Entity, window1: Prop, window2: Prop, cup: Item):
 
 	# STATIC COMPONENTS
 	print ('BACKGROUND')
@@ -42,3 +43,6 @@ def debug(background: Background, camera: Camera, player: Entity, enemy: Entity,
 	print('Window1 x: ', window1.rect.x - camera.offset_x)
 	print('Window2 x: ', window2.rect.x - camera.offset_x)
 	print('Enemy x: ', enemy.rect.x - camera.offset_x)
+
+	print('CUP')
+	print('center: ', cup.rect.center)

@@ -18,7 +18,7 @@ class Animation(object):
 		# Initializes image to be first frame of animation list
 		self.img = self.animation_list[self.frame_index]
 	
-	def update(self):
+	def update(self, player):
 
 		# Update image depending on current animation frame
 		self.img = self.animation_list[self.frame_index]
@@ -31,40 +31,60 @@ class Animation(object):
 		# Resets animation if reached end of animation list.
 		if self.frame_index >= len(self.animation_list):
 			self.frame_index = 0
+			player.is_interacting = False
 
-# Player or enemy class
+# Entity class
 class Entity(pygame.sprite.Sprite):
 	def __init__(self, char_type, x, y, speed, cooldown):
-	
+		super().__init__()
 		# Animation
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
-		self.animate_move = Animation(char_type, 'Move', 2, cooldown)
 
 		# Rectangle size and speed
 		self.rect = self.animate_idle.img.get_rect()
 		self.rect.center = (x, y)
 		self.speed = speed
 
+# Enemy class
+class Enemy(Entity):
+	def __init__(self, char_type, x, y, speed, cooldown):
+		super().__init__(char_type, x, y, speed, cooldown)
+
+	def draw(self, screen, camera):
+		self.animate_idle.update(self)
+		screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+
+# Player class
+class Player(Entity):
+	def __init__(self, char_type, x, y, speed, cooldown):
+		super().__init__(char_type, x, y, speed, cooldown)
+		
+		self.animate_move = Animation(char_type, 'Move', 2, cooldown)
+		self.animate_interact = Animation(char_type, 'Interact', 5, cooldown * 2)
+
 		# Moving directions
 		self.moving_right = False
 		self.moving_left = False
 		self.direction = 1 # -1 for left, 1 for right
 		self.flip = False
+		self.is_interacting = False
 
 	def draw(self, screen, camera):
-
 		# Blit entity on screen relative to camera position:
 	
 		# Move image -> flips image depending on if it's moving left or right
 		if self.moving_right or self.moving_left:
-			self.animate_move.update()
+			self.animate_move.update(self)
 			screen.blit(pygame.transform.flip(self.animate_move.img, self.flip, False), (self.rect.x - camera.offset_x, self.rect.y))
-	
+
+		elif self.is_interacting:
+			self.animate_interact.update(self)
+			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y))
+
 		# Idle image
 		else:
-			self.animate_idle.update()
+			self.animate_idle.update(self)
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
-
 
 	def move(self):
 		dx = 0
@@ -84,3 +104,18 @@ class Entity(pygame.sprite.Sprite):
 
 		# Blocks player from moving out of screen
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
+	
+	# Function to check if player is colliding with any items
+	# Returns an item
+	def check_collision(self, items):
+		pass
+
+	# Calls check_collision to check for collisions
+	# If there is a collision -> then call item.action on the check_collision returned item.
+	def interact(self, items):
+		pass
+		# item = check_collision(items)
+		# always pick up
+		#		item.action('pick up')
+		#else:
+		#		item.action('drop')
