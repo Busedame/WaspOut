@@ -1,4 +1,6 @@
 import pygame
+from object_groups import ObjectGroups
+from game import render
 
 # Animation class -> currently hardcoded for entities.
 class Animation(object):
@@ -14,7 +16,7 @@ class Animation(object):
 		for i in range(frames):
 			image = pygame.image.load(f'img/Entity/{char_type}/{motion_type}/{i}.png')
 			self.animation_list.append(image)
-		
+
 		# Initializes image to be first frame of animation list
 		self.img = self.animation_list[self.frame_index]
 	
@@ -33,10 +35,13 @@ class Animation(object):
 			self.frame_index = 0
 			player.is_interacting = False
 
-# Entity class
-class Entity(pygame.sprite.Sprite):
+# Enemy class
+class Enemy(pygame.sprite.Sprite):
 	def __init__(self, char_type, x, y, speed, cooldown):
+
+		# Initialize parent class
 		super().__init__()
+	
 		# Animation
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
 
@@ -45,29 +50,36 @@ class Entity(pygame.sprite.Sprite):
 		self.rect.center = (x, y)
 		self.speed = speed
 
-# Enemy class
-class Enemy(Entity):
-	def __init__(self, char_type, x, y, speed, cooldown):
-		super().__init__(char_type, x, y, speed, cooldown)
-
 	def draw(self, screen, camera):
 		self.animate_idle.update(self)
 		screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
 # Player class
-class Player(Entity):
+class Player(pygame.sprite.Sprite):
 	def __init__(self, char_type, x, y, speed, cooldown):
-		super().__init__(char_type, x, y, speed, cooldown)
-		
+		# Initialize parent class
+		super().__init__()
+	
+		# Animation
+		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
 		self.animate_move = Animation(char_type, 'Move', 2, cooldown)
 		self.animate_interact = Animation(char_type, 'Interact', 5, cooldown * 2)
 
+		# Rectangle size and speed
+		self.rect = self.animate_idle.img.get_rect()
+		self.rect.center = (x, y)
+		self.speed = speed
+		
 		# Moving directions
 		self.moving_right = False
 		self.moving_left = False
 		self.direction = 1 # -1 for left, 1 for right
 		self.flip = False
+
+		# Interactions
 		self.is_interacting = False
+		self.item_to_pick_up = None
+		self.item_collision = False
 
 	def draw(self, screen, camera):
 		# Blit entity on screen relative to camera position:
@@ -106,16 +118,34 @@ class Player(Entity):
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
 	
 	# Function to check if player is colliding with any items
-	# Returns an item
-	def check_collision(self, items):
-		pass
+	# Returns the item if any
+	def check_item_collision(self, items):
+		collisions = pygame.sprite.spritecollide(self, items, False)
+		if collisions:
+			return collisions[0]
 
-	# Calls check_collision to check for collisions
-	# If there is a collision -> then call item.action on the check_collision returned item.
-	def interact(self, items):
-		pass
-		# item = check_collision(items)
-		# always pick up
-		#		item.action('pick up')
-		#else:
-		#		item.action('drop')
+		return None
+
+	# Pauses the game while player interact animation is running.
+	# Removes item from rendered and items group, and adds it to inventory.
+	def pick_up_item(self, groups, sprites, enemy, screen, camera):
+		item = self.check_item_collision(groups.items)
+
+		if not item:
+			return
+
+		self.moving_right = False
+		self.moving_left = False
+		self.is_interacting = True
+
+		while self.is_interacting:
+			self.animate_interact.update(self)
+			render(groups, sprites, self, enemy, screen, camera, True)
+
+		item.action('pick up', groups)
+
+	def drop_item(self, groups):
+		inventory = groups.inventory.sprites()
+		if inventory:
+			if inventory[0]:
+				inventory[0].action('drop', groups)

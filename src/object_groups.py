@@ -19,6 +19,9 @@ class ObjectGroups:
 		# Props
 		self.props = pygame.sprite.Group(sprites.fridge)
 
+		# UI
+		self.UI = pygame.sprite.Group(sprites.interact_box)
+
 		# Objects belonging to each floor
 		self.upstairs = pygame.sprite.Group(
 			sprites.background,

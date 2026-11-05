@@ -3,8 +3,9 @@ from entity import Player, Enemy
 from background import Background
 from props import Prop
 from item import Item
+from UI import UI
 
-# Every entity (player, enemy )in the world and their initial position is here.
+# Every entity (player, enemy) in the world and their initial position is here.
 class Entities:
 	def __init__(self, window_width, window_height):
 		# Characters
@@ -22,7 +23,10 @@ class Sprites:
 		self.logo = Prop('logo', 420, 200, 1)
 
 		# Props
-		self.fridge = Prop('fridge', 200, 260, 0.80)
+		self.fridge = Prop('fridge', 200, 260, 0.70)
+
+		# UI
+		self.interact_box = UI('interact_box', 0, 0, 1)
 
 		# Items
 		self.cup = Item('cup', 950, 280, 1, player)

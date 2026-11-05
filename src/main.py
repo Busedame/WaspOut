@@ -1,4 +1,5 @@
 import pygame
+import game
 from objects import Sprites, Entities
 from object_groups import ObjectGroups
 from camera import Camera
@@ -57,17 +58,8 @@ while intro:
 # Main loop
 while running:
 
-	# Draw background, items and props
-	groups.draw(screen, camera, groups.rendered)
-
-	# Draw the player
-	player.draw(screen, camera)
-
-	# Draw the enemy
-	enemy.draw(screen, camera)
-
-	# Render all images
-	pygame.display.flip()
+	item_collision = game.update(groups, sprites, player, camera)
+	game.render(groups, sprites, player, enemy, screen, camera, item_collision)
 
 	# Check for events
 	for event in pygame.event.get():
@@ -75,13 +67,20 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 		
+		# Player actions
 		if event.type == pygame.KEYDOWN:
+			# Picking up item
 			if event.key == pygame.K_w:
-				player.is_interacting = True
-			elif event.key == pygame.K_d and player.is_interacting == False:
+				player.pick_up_item(groups, sprites, enemy, screen, camera)
+			elif event.key == pygame.K_s:
+				player.drop_item(groups)
+			# Moving right
+			elif event.key == pygame.K_d:
 				player.moving_right = True
-			elif event.key == pygame.K_a and player.is_interacting == False:
+			# Moving left
+			elif event.key == pygame.K_a:
 				player.moving_left = True
+			# Exit game
 			if event.key == pygame.K_ESCAPE:
 				running = False
 
@@ -94,13 +93,7 @@ while running:
 	# Get delta time
 	dt = clock.tick(60) / 1000
 
-	# Move the player
-	player.move()
-
-	# Move the camera
-	camera.move()
-
 	# DEBUG PRINTS 
-	debug(entities, sprites, camera)
+	#debug(entities, sprites, camera)
 
 pygame.quit()

@@ -10,16 +10,27 @@ class Item(Sprite):
 
 		self.picked_up = False
 		self.player = player
-	
-	def draw(self, screen, camera):
-		# Blits prop on screen relative to camera position
-		if not self.picked_up:
-			super().draw(screen, camera)
-	
-	def action(self, action_type):
+
+	def action(self, action_type, groups):
 		if action_type == 'pick up':
-			self.picked_up = True
-			print(f'player picked up {self.name}')
+			self.pick_up(groups)
+
 		elif action_type == 'drop':
-			self.picked_up = False
-			self.rect.midbottom = (self.player.rect.centerx, self.player.rect.bottom)
+			self.drop(groups)
+
+	def pick_up(self, groups):
+		self.picked_up = True
+		groups.inventory.add(self)
+		groups.rendered.remove(self)
+		groups.items.remove(self)
+
+		print(f'player picked up {self.name}')
+
+	def drop(self, groups):
+		self.picked_up = False
+		self.rect.midbottom = (self.player.rect.centerx, self.player.rect.bottom)
+		groups.inventory.remove(self)
+		groups.rendered.add(self)
+		groups.items.add(self)
+
+		print(f'player dropped {self.name}')

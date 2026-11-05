@@ -99,3 +99,8 @@ the x/y coordinates of player, and do action there.
 
 assets = object containing pygame.sprite.Group (one for items, one for props)
 items = object inheriting from pygame.sprite.Group -> containing several pygame.sprite.Sprite
+
+I need a custom way for player interaction animation.
+Cause running it the same way as movement or idle does NOT work.
+I want to come up with a better solution than the current one - maybe a specific rendering situation
+for the movements - like a little cinematic feeling or so.
