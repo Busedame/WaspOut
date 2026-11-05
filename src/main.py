@@ -71,9 +71,9 @@ while running:
 		if event.type == pygame.KEYDOWN:
 			# Picking up item
 			if event.key == pygame.K_w:
-				player.pick_up_item(groups, sprites, enemy, screen, camera)
+				player.picking_up_item = True
 			elif event.key == pygame.K_s:
-				player.drop_item(groups)
+				player.dropping_item = True
 			# Moving right
 			elif event.key == pygame.K_d:
 				player.moving_right = True
@@ -89,6 +89,8 @@ while running:
 				player.moving_right = False
 			if event.key == pygame.K_a:
 				player.moving_left = False
+			elif event.key == pygame.K_s:
+				player.dropping_item = False
 
 	# Get delta time
 	dt = clock.tick(60) / 1000

@@ -3,7 +3,15 @@ import pygame
 def update(groups, sprites, player, camera):
 
 	# Move the player
-	player.move()
+	if player.moving_right or player.moving_left:
+		player.move()
+	
+	# Player interacts
+	if player.picking_up_item:
+		player.pick_up_item(groups)
+
+	if player.dropping_item:
+		player.drop_item(groups)
 
 	# Move the camera
 	camera.move()

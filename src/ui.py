@@ -20,7 +20,7 @@ class UI(Sprite):
 			self.text_image = self.text_font.render(f'pick up {item.name}: w', True, (255, 255, 255))
 		else:
 			self.text_image = None
-	
+
 	def draw(self, screen, camera):
 		if self.text_image is not None:
 			super().draw(screen, camera)

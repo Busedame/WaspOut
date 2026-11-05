@@ -3,7 +3,7 @@ from entity import Player, Enemy
 from background import Background
 from props import Prop
 from item import Item
-from UI import UI
+from ui import UI
 
 # Every entity (player, enemy) in the world and their initial position is here.
 class Entities:
