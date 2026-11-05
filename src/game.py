@@ -22,7 +22,7 @@ def update(groups, sprites, player, enemy, camera):
 	# Move the camera
 	camera.move()
 
-	return player.check_collision(sprites)
+	return player.check_collision()
 
 def render(groups, sprites, player, enemy, screen, camera, collision):
 	# Draw background, items and props

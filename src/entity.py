@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
 
 	# Collision checks
-	def check_collision(self, sprites):
+	def check_collision(self):
 
 		# Check for item collision
 		item = self.check_item_collision(self.groups.items)
@@ -152,16 +152,17 @@ class Player(pygame.sprite.Sprite):
 			return
 		
 		enemy.action('capture', self.groups)
+
+		self.picking_up_item = False
 	
 	def release(self):
 		self.releasing_enemy = False
 
-		enemy = self.inventory.sprites()
-		
-		if not enemy:
-			return
-
-		enemy[0].action('release', self)
+		for sprite in self.inventory:
+			if isinstance(sprite, Enemy):
+				sprite.action('release', self)
+				self.dropping_item = False
+				return
 
 	def open_window(self, item):
 		pass
