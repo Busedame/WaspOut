@@ -10,7 +10,7 @@ class Entities:
 	def __init__(self, window_width, window_height):
 		# Characters
 		self.player = Player('Player', 200, 300, 3, 150)
-		self.enemy = Enemy('Enemy', 950, 150, 3, 200)
+		self.enemy = Enemy('Enemy', 700, 300, 3, 200)
 
 # Every sprite (background, item, prop) in the world and their initial position is here.
 class Sprites:
@@ -30,4 +30,5 @@ class Sprites:
 
 		# Items
 		self.cup = Item('cup', 950, 280, 1, player)
+		self.paper = Item('paper', 100, 400, 1, player)
 		self.window = Item('window_tmp', 900, 200, 0.5, player)

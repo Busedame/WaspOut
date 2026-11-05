@@ -57,9 +57,8 @@ while intro:
 
 # Main loop
 while running:
-
-	item_collision = game.update(groups, sprites, player, camera)
-	game.render(groups, sprites, player, enemy, screen, camera, item_collision)
+	collision = game.update(groups, sprites, player, enemy, camera)
+	game.render(groups, sprites, player, enemy, screen, camera, collision)
 
 	# Check for events
 	for event in pygame.event.get():
@@ -72,8 +71,10 @@ while running:
 			# Picking up item
 			if event.key == pygame.K_w:
 				player.picking_up_item = True
+				player.capturing_enemy = True
 			elif event.key == pygame.K_s:
 				player.dropping_item = True
+				player.releasing_enemy = True
 			# Moving right
 			elif event.key == pygame.K_d:
 				player.moving_right = True

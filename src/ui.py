@@ -10,16 +10,24 @@ class UI(Sprite):
 		# Text
 		self.text_font = pygame.font.SysFont("Arial", 10)
 		self.text_image = None
-	
-	def set_interact_box(self, player, item):
+
+	def action(self, player, action_type, target):
 		self.rect.x = player.rect.x + player.rect.w
 		self.rect.y = player.rect.y
 
-		# Actions
+		if action_type == 'pick up':
+			self.pick_up(player, target)
+		if action_type == 'capture':
+			self.capture(player, target)
+
+	def pick_up(self, player, item):
 		if not item.picked_up:
 			self.text_image = self.text_font.render(f'pick up {item.name}: w', True, (255, 255, 255))
 		else:
 			self.text_image = None
+
+	def capture(self, player, enemy):
+		self.text_image = self.text_font.render(f'capture {enemy.name}: w', True, (255, 255, 255))
 
 	def draw(self, screen, camera):
 		if self.text_image is not None:

@@ -5,6 +5,9 @@ from animation import Animation
 
 # Player class
 class Player(pygame.sprite.Sprite):
+	inventory: pygame.sprite.Group
+	groups: ObjectGroups
+
 	def __init__(self, char_type, x, y, speed, cooldown):
 		# Initialize parent class
 		super().__init__()
@@ -28,6 +31,8 @@ class Player(pygame.sprite.Sprite):
 		# Interactions
 		self.picking_up_item = False
 		self.dropping_item = False
+		self.capturing_enemy = False
+		self.releasing_enemy = False
 		#self.is_interacting = False
 
 	def draw(self, screen, camera):
@@ -43,6 +48,7 @@ class Player(pygame.sprite.Sprite):
 			self.animate_idle.update(self)
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
+	# Moves player rect depending on direction and speed
 	def move(self):
 		dx = 0
 
@@ -62,6 +68,22 @@ class Player(pygame.sprite.Sprite):
 		# Blocks player from moving out of screen
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
 
+	# Collision checks
+	def check_collision(self, sprites):
+
+		# Check for item collision
+		item = self.check_item_collision(self.groups.items)
+		if item:
+			self.sprites.interact_box.action(self, 'pick up', item)
+			return True
+	
+		# Check for enemy collision
+		enemy = self.check_enemy_collision(self.groups.enemies)
+		if enemy:
+			self.sprites.interact_box.action(self, 'capture', enemy)
+			return True
+
+		return False
 	
 	# Function to check if player is colliding with any items
 	# Returns the item if any
@@ -76,28 +98,73 @@ class Player(pygame.sprite.Sprite):
 				smallest_item = item
 
 		return smallest_item
+	
+	def check_enemy_collision(self, enemies):
+		enemy = pygame.sprite.spritecollide(self, enemies, False)
+		if not enemy:
+			return None
+		return enemy[0]
 
-	# Pauses the game while player interact animation is running.
 	# Removes item from rendered and items group, and adds it to inventory.
-	def pick_up_item(self, groups):
+	def pick_up_item(self):
 		self.picking_up_item = False
 
-		item = self.check_item_collision(groups.items)
+		item = self.check_item_collision(self.groups.items)
 
 		if not item:
 			return
 
-		item.action('pick up', groups)
+		item.action('pick up', self.groups)
 
-	def drop_item(self, groups):
+		self.capturing_enemy = False
+
+	# Removes item from inventory and adds it to rendered and items group.
+	def drop_item(self):
 		self.dropping_item = False
 
-		inventory = groups.inventory.sprites()
+		inventory = self.inventory.sprites()
 
 		if not inventory:
 			return
 
-		inventory[0].action('drop', groups)
+		inventory[0].action('drop', self.groups)
+
+		self.releasing_enemy = False
+	
+	def item_exists_in_inventory(self, name):
+		for sprite in self.inventory:
+			if sprite.name == name:
+				return True
+
+		return False
+
+	def capture(self):
+		self.capturing_enemy = False
+
+		enemy = self.check_enemy_collision(self.groups.enemies)
+			
+		if not enemy:
+			return
+		
+		if not self.item_exists_in_inventory('cup') \
+			or not self.item_exists_in_inventory('paper'):
+			print('GAME OVER')
+			return
+		
+		enemy.action('capture', self.groups)
+	
+	def release(self):
+		self.releasing_enemy = False
+
+		enemy = self.inventory.sprites()
+		
+		if not enemy:
+			return
+
+		enemy[0].action('release', self)
+
+	def open_window(self, item):
+		pass
 
 # Enemy class
 class Enemy(pygame.sprite.Sprite):
@@ -114,6 +181,35 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.center = (x, y)
 		self.speed = speed
 
+		self.name = char_type
+
+		self.captured = False
+
 	def draw(self, screen, camera):
-		self.animate_idle.update(self)
-		screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+		if not self.captured:
+			self.animate_idle.update(self)
+			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+
+	def action(self, action_type, groups):
+		if action_type == 'capture':
+			self.capture(groups)
+
+		elif action_type == 'release':
+			self.release(groups)
+
+	def capture(self, groups):
+		self.captured = True
+		groups.inventory.add(self)
+		groups.rendered.remove(self)
+		groups.enemies.remove(self)
+
+		print(f'player captured {self.name}')
+	
+	def release(self, player):
+		self.captured = False
+		self.rect.midbottom = (player.rect.centerx, player.rect.bottom)
+		player.groups.inventory.remove(self)
+		player.groups.rendered.add(self)
+		player.groups.enemies.add(self)
+
+		print(f'player released {self.name}')

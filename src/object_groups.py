@@ -11,7 +11,7 @@ class ObjectGroups:
 		self.enemies = pygame.sprite.Group(entities.enemy)
 
 		# All items in game
-		self.items = pygame.sprite.Group(sprites.cup, sprites.window)
+		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper)
 
 		# Items currently carried
 		self.inventory = pygame.sprite.Group()
@@ -28,6 +28,7 @@ class ObjectGroups:
 			sprites.fridge,
 			sprites.window,
 			sprites.cup,
+			sprites.paper,
 			entities.enemy,
 			entities.player
 		)
@@ -38,8 +39,14 @@ class ObjectGroups:
 			sprites.background,
 			sprites.fridge,
 			sprites.window,
-			sprites.cup
+			sprites.cup,
+			sprites.paper
 		)
+
+		# Assign inventory to player
+		entities.player.inventory = self.inventory
+		entities.player.groups = self
+		entities.player.sprites = sprites
 
 	# A custom draw method to make sure camera movement works.
 	# Calls each sprite's individual draw method.
