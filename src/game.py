@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = True
+DEBUG = False
 
 class Game():
 	def __init__(self):

@@ -2,6 +2,7 @@ import pygame
 from object_groups import ObjectGroups
 from animation import Animation
 from item import Item
+import string
 
 # Player class
 class Player(pygame.sprite.Sprite):
@@ -30,12 +31,12 @@ class Player(pygame.sprite.Sprite):
 
 		# Interactions
 		self.interaction = None
-		self.picking_up_item = False
-		self.dropping_item = False
-		self.capturing_enemy = False
-		self.releasing_enemy = False
-		#self.is_interacting = False
 
+	#
+	# ///// PLAYER RENDER //////
+	#
+
+	# Draw player animation on screen, depending on player movement
 	def draw(self, screen, camera):
 		# Blit entity on screen relative to camera position:
 	
@@ -48,6 +49,10 @@ class Player(pygame.sprite.Sprite):
 		else:
 			self.animate_idle.update(self)
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+
+	#
+	# ///// PLAYER MOVEMENT //////
+	#
 
 	# Moves player rect depending on direction and speed
 	def move(self):
@@ -69,7 +74,11 @@ class Player(pygame.sprite.Sprite):
 		# Blocks player from moving out of screen
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
 
-	# Collision checks
+	#
+	# ///// COLLISIONS //////
+	#
+
+	# Checks if player is colliding with an enemy or an item
 	def check_collision(self):
 
 		# Check for item collision
@@ -86,8 +95,8 @@ class Player(pygame.sprite.Sprite):
 
 		return None
 	
-	# Function to check if player is colliding with any items
-	# Returns the item if any
+	# Checks if player is colliding with an item
+	# Returns the smallest rectangle item, if any
 	def check_item_collision(self, items):
 		collisions = pygame.sprite.spritecollide(self, items, False)
 		if not collisions:
@@ -100,24 +109,38 @@ class Player(pygame.sprite.Sprite):
 
 		return smallest_item
 	
+	# Checks if player is colliding with an enemy
+	# If multiple, returns first one
 	def check_enemy_collision(self, enemies):
 		enemy = pygame.sprite.spritecollide(self, enemies, False)
 		if not enemy:
 			return None
 		return enemy[0]
-	
+
+	#
+	# ///// PLAYER INTERACTIONS //////
+	#	
+
 	def handle_interaction(self, target):
+		
+		# interact == pick up, capture, open
 		if self.interaction == 'interact':
 
 			if isinstance(target, Item):
 				target.action('pick up', self.groups)
 			
 			elif isinstance(target, Enemy):
-				self.capture(target)
+				if not self.item_exists_in_inventory('cup') \
+				or not self.item_exists_in_inventory('paper'):
+					print('OUCH!')
+					return
+	
+				target.action('capture', self.groups)
 			
 			else:
 				return
 
+		# inventory == drop, release
 		elif self.interaction == 'inventory':
 			
 			for sprite in self.inventory:
@@ -132,60 +155,20 @@ class Player(pygame.sprite.Sprite):
 					sprite.action('drop', self.groups)
 					return
 
+	def open_window(self, item):
+		pass
 
-	# Removes item from rendered and items group, and adds it to inventory.
-	def pick_up_item(self):
-		self.picking_up_item = False
+	#
+	# ///// HELPER FUNCTIONS //////
+	#
 
-		item = self.check_item_collision(self.groups.items)
-
-		if not item:
-			return
-
-		item.action('pick up', self.groups)
-
-		self.capturing_enemy = False
-
-	# Removes item from inventory and adds it to rendered and items group.
-	def drop_item(self):
-		self.dropping_item = False
-
-		inventory = self.inventory.sprites()
-
-		if not inventory:
-			return
-
-		inventory[0].action('drop', self.groups)
-
-		self.releasing_enemy = False
-	
-	def item_exists_in_inventory(self, name):
+	# Checks if name exists in inventory, return boolean
+	def item_exists_in_inventory(self, name: string):
 		for sprite in self.inventory:
 			if sprite.name == name:
 				return True
 
 		return False
-
-	def capture(self, enemy):
-		
-		if not self.item_exists_in_inventory('cup') \
-			or not self.item_exists_in_inventory('paper'):
-			print('OUCH!')
-			return
-		
-		enemy.action('capture', self.groups)
-	
-	def release(self):
-		self.releasing_enemy = False
-
-		for sprite in self.inventory:
-			if isinstance(sprite, Enemy):
-				sprite.action('release', self)
-				self.dropping_item = False
-				return
-
-	def open_window(self, item):
-		pass
 
 # Enemy class
 class Enemy(pygame.sprite.Sprite):
