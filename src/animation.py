@@ -12,12 +12,12 @@ class Animation(object):
 
 		# Stores all frames in animation list
 		for i in range(frames):
-			image = pygame.image.load(f'img/Entity/{char_type}/{motion_type}/{i}.png')
+			image = pygame.image.load(f'img/Entity/{char_type}/{motion_type}/{i}.png').convert_alpha()
 			self.animation_list.append(image)
 
 		# Initializes image to be first frame of animation list
 		self.img = self.animation_list[self.frame_index]
-	
+
 	def update(self, player):
 
 		# Update image depending on current animation frame

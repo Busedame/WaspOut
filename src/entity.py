@@ -1,6 +1,5 @@
 import pygame
 from object_groups import ObjectGroups
-from game import render
 from animation import Animation
 
 # Player class
@@ -148,7 +147,7 @@ class Player(pygame.sprite.Sprite):
 		
 		if not self.item_exists_in_inventory('cup') \
 			or not self.item_exists_in_inventory('paper'):
-			print('GAME OVER')
+			print('OUCH!')
 			return
 		
 		enemy.action('capture', self.groups)
