@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = False
+DEBUG = True
 
 class Game():
 	def __init__(self):
@@ -30,8 +30,8 @@ class Game():
 		# Initialize camera
 		self.camera = Camera(0, 0, self.window_width, self.window_height, self.player)
 
-		# Collision boolean (True if player is colliding with enemy or item)
-		self.collision = False
+		# Collision
+		self.collision = None # item, enemy or None
 
 		# Loop booleans
 		self.intro = True
@@ -79,11 +79,9 @@ class Game():
 				if event.type == pygame.KEYDOWN:
 					# Picking up item
 					if event.key == pygame.K_w:
-						self.player.picking_up_item = True
-						self.player.capturing_enemy = True
+						self.player.interaction = 'interact'
 					elif event.key == pygame.K_s:
-						self.player.dropping_item = True
-						self.player.releasing_enemy = True
+						self.player.interaction = 'inventory'
 					# Moving right
 					elif event.key == pygame.K_d:
 						self.player.moving_right = True
@@ -99,8 +97,6 @@ class Game():
 						self.player.moving_right = False
 					if event.key == pygame.K_a:
 						self.player.moving_left = False
-					elif event.key == pygame.K_s:
-						self.player.dropping_item = False
 
 			# Get delta time
 			self.dt = self.clock.tick(60) / 1000
@@ -111,27 +107,19 @@ class Game():
 	# Game update current state
 	def update(self):
 
+		# Update collision -> 'item', 'enemy' or None
+		self.collision = self.player.check_collision()
+
 		# Move the player
 		if self.player.moving_right or self.player.moving_left:
 			self.player.move()
 	
-		# Player interacts
-		if self.player.picking_up_item:
-			self.player.pick_up_item()
-
-		if self.player.capturing_enemy:
-			self.player.capture()
-
-		if self.player.releasing_enemy:
-			self.player.release()
-
-		if self.player.dropping_item:
-			self.player.drop_item()
+		if self.player.interaction:
+			self.player.handle_interaction(self.collision)
+			self.player.interaction = None
 
 		# Move the camera
 		self.camera.move()
-
-		self.collision = self.player.check_collision()
 
 	# Game render current state
 	def render(self):

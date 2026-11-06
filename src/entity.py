@@ -1,6 +1,7 @@
 import pygame
 from object_groups import ObjectGroups
 from animation import Animation
+from item import Item
 
 # Player class
 class Player(pygame.sprite.Sprite):
@@ -28,6 +29,7 @@ class Player(pygame.sprite.Sprite):
 		self.flip = False
 
 		# Interactions
+		self.interaction = None
 		self.picking_up_item = False
 		self.dropping_item = False
 		self.capturing_enemy = False
@@ -74,15 +76,15 @@ class Player(pygame.sprite.Sprite):
 		item = self.check_item_collision(self.groups.items)
 		if item:
 			self.sprites.interact_box.action(self, 'pick up', item)
-			return True
+			return item
 	
 		# Check for enemy collision
 		enemy = self.check_enemy_collision(self.groups.enemies)
 		if enemy:
 			self.sprites.interact_box.action(self, 'capture', enemy)
-			return True
+			return enemy
 
-		return False
+		return None
 	
 	# Function to check if player is colliding with any items
 	# Returns the item if any
@@ -103,6 +105,33 @@ class Player(pygame.sprite.Sprite):
 		if not enemy:
 			return None
 		return enemy[0]
+	
+	def handle_interaction(self, target):
+		if self.interaction == 'interact':
+
+			if isinstance(target, Item):
+				target.action('pick up', self.groups)
+			
+			elif isinstance(target, Enemy):
+				self.capture(target)
+			
+			else:
+				return
+
+		elif self.interaction == 'inventory':
+			
+			for sprite in self.inventory:
+
+				if isinstance(sprite, Enemy):
+					sprite.action('release', self)
+					return
+			
+			for sprite in self.inventory:
+
+				if isinstance(sprite, Item):
+					sprite.action('drop', self.groups)
+					return
+
 
 	# Removes item from rendered and items group, and adds it to inventory.
 	def pick_up_item(self):
@@ -137,13 +166,7 @@ class Player(pygame.sprite.Sprite):
 
 		return False
 
-	def capture(self):
-		self.capturing_enemy = False
-
-		enemy = self.check_enemy_collision(self.groups.enemies)
-			
-		if not enemy:
-			return
+	def capture(self, enemy):
 		
 		if not self.item_exists_in_inventory('cup') \
 			or not self.item_exists_in_inventory('paper'):
@@ -151,8 +174,6 @@ class Player(pygame.sprite.Sprite):
 			return
 		
 		enemy.action('capture', self.groups)
-
-		self.picking_up_item = False
 	
 	def release(self):
 		self.releasing_enemy = False
