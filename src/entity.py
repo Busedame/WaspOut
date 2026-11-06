@@ -9,6 +9,10 @@ class Player(pygame.sprite.Sprite):
 	inventory: pygame.sprite.Group
 	groups: ObjectGroups
 
+	#
+	# ///// PLAYER INIT //////
+	#
+
 	def __init__(self, char_type, x, y, speed, cooldown):
 		# Initialize parent class
 		super().__init__()
@@ -32,6 +36,7 @@ class Player(pygame.sprite.Sprite):
 		# Interactions
 		self.interaction = None
 
+
 	#
 	# ///// PLAYER RENDER //////
 	#
@@ -49,6 +54,7 @@ class Player(pygame.sprite.Sprite):
 		else:
 			self.animate_idle.update(self)
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+
 
 	#
 	# ///// PLAYER MOVEMENT //////
@@ -73,6 +79,7 @@ class Player(pygame.sprite.Sprite):
 
 		# Blocks player from moving out of screen
 		self.rect.x = max(0, min(self.rect.x, 1280 - self.rect.w))
+
 
 	#
 	# ///// COLLISIONS //////
@@ -117,6 +124,7 @@ class Player(pygame.sprite.Sprite):
 			return None
 		return enemy[0]
 
+
 	#
 	# ///// PLAYER INTERACTIONS //////
 	#	
@@ -158,6 +166,7 @@ class Player(pygame.sprite.Sprite):
 	def open_window(self, item):
 		pass
 
+
 	#
 	# ///// HELPER FUNCTIONS //////
 	#
@@ -170,12 +179,23 @@ class Player(pygame.sprite.Sprite):
 
 		return False
 
+
+
 # Enemy class
 class Enemy(pygame.sprite.Sprite):
+	enemy_count = 0 # For naming enemies: Enemy_1, Enemy_2 etc.
+
+	#
+	# ///// ENEMY INIT //////
+	#
+
 	def __init__(self, char_type, x, y, speed, cooldown):
 
 		# Initialize parent class
 		super().__init__()
+	
+		# Enemy count
+		Enemy.enemy_count += 1
 	
 		# Animation
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
@@ -185,15 +205,28 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.center = (x, y)
 		self.speed = speed
 
-		self.name = char_type
+		# Enemy name -> increments by 1 per enemy
+		self.name = f"{char_type}_{Enemy.enemy_count}"
 
+		# Boolean indicating if enemy has been captured
 		self.captured = False
+
+
+	#
+	# ///// ENEMY RENDER //////
+	#
 
 	def draw(self, screen, camera):
 		if not self.captured:
 			self.animate_idle.update(self)
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
+
+	#
+	# ///// ENEMY ACTIONS //////
+	#
+
+	# Calls correct action
 	def action(self, action_type, groups):
 		if action_type == 'capture':
 			self.capture(groups)
@@ -201,6 +234,7 @@ class Enemy(pygame.sprite.Sprite):
 		elif action_type == 'release':
 			self.release(groups)
 
+	# Handles when enemy is captured
 	def capture(self, groups):
 		self.captured = True
 		groups.inventory.add(self)
@@ -209,6 +243,7 @@ class Enemy(pygame.sprite.Sprite):
 
 		print(f'player captured {self.name}')
 	
+	# Handles when enemy is released
 	def release(self, player):
 		self.captured = False
 		self.rect.midbottom = (player.rect.centerx, player.rect.bottom)
