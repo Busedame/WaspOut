@@ -18,7 +18,7 @@ class Animation(object):
 		# Initializes image to be first frame of animation list
 		self.img = self.animation_list[self.frame_index]
 
-	def update(self, player):
+	def update(self):
 
 		# Update image depending on current animation frame
 		self.img = self.animation_list[self.frame_index]

@@ -38,3 +38,6 @@ def debug(entities: Entities, sprites: Sprites, camera: Camera):
 
 	print('CUP')
 	print('center: ', sprites.cup.rect.center)
+
+	print('PAPER')
+	print('center: ', sprites.paper.rect.center)

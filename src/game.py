@@ -13,7 +13,7 @@ class Game():
 		self.window_height = 480
 
 		# Window init and settings
-		self.screen = pygame.display.set_mode((self.window_width, self.window_height))
+		self.screen = pygame.display.set_mode((self.window_width, self.window_height), pygame.FULLSCREEN)
 		pygame.display.set_caption('Wasp out!')
 
 		# Initialize world
@@ -77,9 +77,10 @@ class Game():
 		
 				# Player actions
 				if event.type == pygame.KEYDOWN:
-					# Picking up item
+					# Picking up item, capturing enemy or opening window
 					if event.key == pygame.K_w:
 						self.player.interaction = 'interact'
+					# Dropping item, releasing enemy or closing window
 					elif event.key == pygame.K_s:
 						self.player.interaction = 'inventory'
 					# Moving right

@@ -84,7 +84,8 @@ INTERACTIONS:
 - w for going up stairs
 - s for going down stairs
 - i to open inventory
-- 1, 2, 3 for choosing from inventory -> u for use, y for drop down
+- 1, 2, 3 for choosing from inventory -> u for use, e for drop down
+- 
 - (ESC to exit inventory)
 
 SPRITE GROUPS:
@@ -109,3 +110,7 @@ Item subclasses:
 
 - Pickable/droppable items -> mug, paper
 - Window -> two actions. "Open" and "release". Release only if u have wasp in hands.
+
+Functionality I need:
+- Release wasp in window
+- Open inventory, render contents, and select item to drop.

@@ -47,12 +47,12 @@ class Player(pygame.sprite.Sprite):
 	
 		# Move image -> flips image depending on if it's moving left or right
 		if self.moving_right or self.moving_left:
-			self.animate_move.update(self)
+			self.animate_move.update()
 			screen.blit(pygame.transform.flip(self.animate_move.img, self.flip, False), (self.rect.x - camera.offset_x, self.rect.y))
 
 		# Idle image
 		else:
-			self.animate_idle.update(self)
+			self.animate_idle.update()
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
 
@@ -152,9 +152,9 @@ class Player(pygame.sprite.Sprite):
 				or not self.item_exists_in_inventory('paper'):
 					print('OUCH!')
 					return
-	
+
 				target.action('capture', self.groups)
-			
+
 			else:
 				return
 
@@ -230,7 +230,7 @@ class Enemy(pygame.sprite.Sprite):
 
 	def draw(self, screen, camera):
 		if not self.captured:
-			self.animate_idle.update(self)
+			self.animate_idle.update()
 			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
 
 
