@@ -105,7 +105,7 @@ Cause running it the same way as movement or idle does NOT work.
 I want to come up with a better solution than the current one - maybe a specific rendering situation
 for the movements - like a little cinematic feeling or so.
 
-Items:
+Item subclasses:
 
 - Pickable/droppable items -> mug, paper
 - Window -> two actions. "Open" and "release". Release only if u have wasp in hands.

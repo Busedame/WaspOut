@@ -17,8 +17,10 @@ class UI(Sprite):
 
 		if action_type == 'pick up':
 			self.pick_up(player, target)
-		if action_type == 'capture':
+		elif action_type == 'capture':
 			self.capture(player, target)
+		elif action_type == 'open':
+			self.open_target(player, target)
 
 	def pick_up(self, player, item):
 		if not item.picked_up:
@@ -28,6 +30,12 @@ class UI(Sprite):
 
 	def capture(self, player, enemy):
 		self.text_image = self.text_font.render(f'capture {enemy.name}: w', True, (255, 255, 255))
+
+	def open_target(self, player, target):
+		if not target.opened:
+			self.text_image = self.text_font.render(f'open {target.name}: w', True, (255, 255, 255))
+		else:
+			self.text_image = self.text_font.render(f'close {target.name}: s', True, (255, 255, 255))
 
 	def draw(self, screen, camera):
 		if self.text_image is not None:

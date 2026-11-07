@@ -34,3 +34,47 @@ class Item(Sprite):
 		groups.items.add(self)
 
 		print(f'player dropped {self.name}')
+
+# ItemWindow
+
+class ItemWindow(Item):
+	def __init__(self, item_name, x, y, scalar, player):
+		super().__init__(item_name, x, y, scalar, player)
+
+		self.opened = False
+
+		self.closed_window_image = self.image
+		self.closed_window_rect = self.rect
+		self.closed_window_rect.center = self.rect.center
+
+		img = pygame.image.load(f'img/Items/{item_name}_opened.png').convert_alpha()
+		self.opened_window_image = pygame.transform.scale(img, (int(img.get_width() * scalar), (int(img.get_height() * scalar))))
+		self.opened_window_rect = self.image.get_rect()
+		self.opened_window_rect.center = (x, y)
+	
+	def action(self, action_type, groups):
+		if action_type == 'open' and not self.opened:
+			self.open_window()
+		elif action_type == 'close' and self.opened:
+			self.close_window()
+
+	# Method to open window
+	# Changes image and window state
+	def open_window(self):
+		self.image = self.opened_window_image
+		self.opened = True
+
+		print(f'player opened {self.name}')
+	
+	# Method to close window
+	# Changes image and window state
+	def close_window(self):
+		self.image = self.closed_window_image
+		self.opened = False
+	
+		print(f'player closed {self.name}')
+
+	# Only possible if self.opened == True.
+	# Only possible if self.player.inventory has enemy
+	def release_enemy(self):
+		pass

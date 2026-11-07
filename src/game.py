@@ -139,3 +139,7 @@ class Game():
 
 		# Render all images
 		pygame.display.flip()
+	
+	# Start level over depending on win or lose
+	def end_game(self):
+		pass
