@@ -73,8 +73,3 @@ class ItemWindow(Item):
 		self.opened = False
 	
 		print(f'player closed {self.name}')
-
-	# Only possible if self.opened == True.
-	# Only possible if self.player.inventory has enemy
-	def release_enemy(self):
-		pass

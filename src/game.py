@@ -13,7 +13,7 @@ class Game():
 		self.window_height = 480
 
 		# Window init and settings
-		self.screen = pygame.display.set_mode((self.window_width, self.window_height), pygame.FULLSCREEN)
+		self.screen = pygame.display.set_mode((self.window_width, self.window_height))
 		pygame.display.set_caption('Wasp out!')
 
 		# Initialize world

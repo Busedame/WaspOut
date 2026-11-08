@@ -92,7 +92,7 @@ class Player(pygame.sprite.Sprite):
 		window_item = self.check_item_collision(self.groups.items)
 		if window_item:
 			if isinstance(window_item, ItemWindow):
-				self.sprites.interact_box.action(self, 'open', window_item)
+				self.sprites.interact_box.action(self, 'window', window_item)
 				return window_item
 
 		# Check for item collision
@@ -161,22 +161,22 @@ class Player(pygame.sprite.Sprite):
 		# inventory == drop, release, close
 		elif self.interaction == 'inventory':
 			
-	
-			for sprite in self.inventory:
+			if isinstance(target, ItemWindow) and target.opened:
+				for sprite in self.inventory:
 
-				if isinstance(sprite, Enemy):
-					sprite.action('release', self)
-					return
+					if isinstance(sprite, Enemy):
+						sprite.action('release', self)
+						return
 			
+			if isinstance(target, ItemWindow):
+				target.action('close', self.groups)
+				return
+
 			for sprite in self.inventory:
 
 				if isinstance(sprite, Item):
 					sprite.action('drop', self.groups)
 					return
-			
-			if isinstance(target, ItemWindow):
-				target.action('close', self.groups)
-				return
 
 
 	#
@@ -255,12 +255,8 @@ class Enemy(pygame.sprite.Sprite):
 
 		print(f'player captured {self.name}')
 	
-	# Handles when enemy is released
+	# Handles when enemy is released through window
 	def release(self, player):
-		self.captured = False
-		self.rect.midbottom = (player.rect.centerx, player.rect.bottom)
 		player.groups.inventory.remove(self)
-		player.groups.rendered.add(self)
-		player.groups.enemies.add(self)
 
 		print(f'player released {self.name}')
