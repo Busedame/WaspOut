@@ -114,3 +114,4 @@ Item subclasses:
 Functionality I need:
 - Release wasp in window
 - Open inventory, render contents, and select item to drop.
+- If cup + paper + wasp -> a finished product can't be dropped will only be able to release.

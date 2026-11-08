@@ -29,11 +29,13 @@ class UI(Sprite):
 			self.text_image = None
 
 	def capture(self, player, enemy):
-		self.text_image = self.text_font.render(f'capture {enemy.name}: w', True, (255, 255, 255))
+		self.text_image = self.text_font.render(f'capture wasp: w', True, (255, 255, 255))
 
 	def window(self, player, target):
 		if not target.opened:
 			self.text_image = self.text_font.render(f'open {target.name}: w', True, (255, 255, 255))
+		elif target.opened and player.enemy_captured:
+			self.text_image = self.text_font.render(f'release wasp: s', True, (255, 255, 255))
 		else:
 			self.text_image = self.text_font.render(f'close {target.name}: s', True, (255, 255, 255))
 

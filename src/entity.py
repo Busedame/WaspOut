@@ -35,6 +35,7 @@ class Player(pygame.sprite.Sprite):
 
 		# Interactions
 		self.interaction = None
+		self.enemy_captured = False
 
 
 	#
@@ -154,6 +155,7 @@ class Player(pygame.sprite.Sprite):
 					return
 
 				target.action('capture', self.groups)
+				self.enemy_captured = True
 
 			else:
 				return
@@ -166,6 +168,7 @@ class Player(pygame.sprite.Sprite):
 
 					if isinstance(sprite, Enemy):
 						sprite.action('release', self)
+						self.enemy_captured = False
 						return
 			
 			if isinstance(target, ItemWindow):
