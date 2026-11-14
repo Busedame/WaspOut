@@ -8,6 +8,7 @@ import string
 class Player(pygame.sprite.Sprite):
 	inventory: pygame.sprite.Group
 	groups: ObjectGroups
+	sprites: pygame.sprite.Group
 
 	#
 	# ///// PLAYER INIT //////
@@ -45,6 +46,9 @@ class Player(pygame.sprite.Sprite):
 	# Draw player animation on screen, depending on player movement
 	def draw(self, screen, camera):
 		# Blit entity on screen relative to camera position:
+
+		if self.interaction:
+			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y))
 	
 		# Move image -> flips image depending on if it's moving left or right
 		if self.moving_right or self.moving_left:
@@ -215,6 +219,9 @@ class Enemy(pygame.sprite.Sprite):
 	
 		# Animation
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
+
+		# Image
+		self.image = self.animate_idle.img
 
 		# Rectangle size and speed
 		self.rect = self.animate_idle.img.get_rect()

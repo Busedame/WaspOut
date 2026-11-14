@@ -4,16 +4,18 @@ from sprite import Sprite
 class Item(Sprite):
 	def __init__(self, item_name, x, y, scalar, player):
 		super().__init__(f'img/Items/{item_name}.png', x, y, scalar)
-		self.player = player
-		self.name = item_name
+		self.player = player # Player instance
+		self.name = item_name # Name of item
 
 # Used for items that can be stored in inventory
 class ItemInventory(Item):
 	def __init__(self, item_name, x, y, scalar, player):
 		super().__init__(item_name, x, y, scalar, player)
 
+		# Boolean to check if item is currently picked up by player
 		self.picked_up = False
 
+	# Determines which action to perform
 	def action(self, action_type, groups):
 		if action_type == 'pick up':
 			self.pick_up(groups)
@@ -21,6 +23,8 @@ class ItemInventory(Item):
 		elif action_type == 'drop':
 			self.drop(groups)
 
+	# Method to pick up item
+	# Ensures that it visually disappears from world, and adds item to inventory
 	def pick_up(self, groups):
 		self.picked_up = True
 		groups.inventory.add(self)
@@ -29,6 +33,8 @@ class ItemInventory(Item):
 
 		print(f'player picked up {self.name}')
 
+	# Method to drop item
+	# Ensures that it visually reappears in world at player's feet, and removes item to inventory
 	def drop(self, groups):
 		self.picked_up = False
 		self.rect.midbottom = (self.player.rect.centerx, self.player.rect.bottom)
@@ -39,22 +45,28 @@ class ItemInventory(Item):
 		print(f'player dropped {self.name}')
 
 
-# Used for window items
+# Used for window items.
+# There are two different images (opened and close window), and self.image will store
+# one of them depending on state of window.
 class ItemWindow(Item):
 	def __init__(self, item_name, x, y, scalar, player):
 		super().__init__(item_name, x, y, scalar, player)
 
+		# Boolean to check if window is currently open
 		self.opened = False
 
+		# Closed window image (already initialized in self.image by parent class)
 		self.closed_window_image = self.image
 		self.closed_window_rect = self.rect
 		self.closed_window_rect.center = self.rect.center
 
+		# Opened window image (gets initialized here)
 		img = pygame.image.load(f'img/Items/{item_name}_opened.png').convert_alpha()
 		self.opened_window_image = pygame.transform.scale(img, (int(img.get_width() * scalar), (int(img.get_height() * scalar))))
 		self.opened_window_rect = self.image.get_rect()
 		self.opened_window_rect.center = (x, y)
 	
+	# Determines which action to perform
 	def action(self, action_type, groups):
 		if action_type == 'open' and not self.opened:
 			self.open_window()

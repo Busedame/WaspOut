@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = False
+DEBUG = True
 
 class Game():
 	def __init__(self):
@@ -59,7 +59,7 @@ class Game():
 						self.running = False
 					if event.key == pygame.K_SPACE:
 						self.intro = False
-	
+
 			# Caps the runtime speed to not kill CPU
 			self.clock.tick(60)
 
@@ -110,6 +110,7 @@ class Game():
 
 			if DEBUG:
 				debug(self.entities, self.sprites, self.camera)
+				print(self.sprites.inventory.print_items())
 
 	# Game update current state
 	def update(self):
@@ -144,9 +145,12 @@ class Game():
 		if self.collision:
 			self.sprites.interact_box.draw(self.screen, self.camera)
 
+		# Draw inventory
+		self.sprites.inventory.draw(self.screen)
+
 		# Render all images
 		pygame.display.flip()
-	
+
 	# Start level over depending on win or lose
 	def end_game(self):
 		while self.outro:

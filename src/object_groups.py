@@ -23,7 +23,7 @@ class ObjectGroups:
 		self.props = pygame.sprite.Group(sprites.fridge)
 
 		# UI
-		self.UI = pygame.sprite.Group(sprites.interact_box)
+		self.UI = pygame.sprite.Group(sprites.interact_box, sprites.inventory)
 
 		# Objects belonging to each floor
 		self.upstairs = pygame.sprite.Group(
@@ -46,10 +46,14 @@ class ObjectGroups:
 			sprites.paper
 		)
 
-		# Assign inventory to player
+		# Assign properties to player
 		entities.player.inventory = self.inventory
 		entities.player.groups = self
 		entities.player.sprites = sprites
+
+		# Assign inventory group to inventory 
+		sprites.inventory.inventory = self.inventory
+
 
 	# A custom draw method to make sure camera movement works.
 	# Calls each sprite's individual draw method.
