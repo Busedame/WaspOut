@@ -183,8 +183,9 @@ class Player(pygame.sprite.Sprite):
 			for sprite in self.inventory:
 
 				if isinstance(sprite, ItemInventory):
-					sprite.action('drop', self.groups)
-					return
+					if not self.enemy_captured:
+						sprite.action('drop', self.groups)
+						return
 
 
 	#
@@ -262,7 +263,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.captured = True
 		groups.inventory.add(self)
 		groups.rendered.remove(self)
-		groups.enemies.remove(self)
+		groups.enemies.remove(self) # Needs to change at some point =)
 
 		print(f'player captured {self.name}')
 	

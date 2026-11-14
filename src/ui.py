@@ -19,9 +19,6 @@ class UIInventory(UI):
 
 	def __init__(self, background, x, y, scalar):
 		super().__init__(background, x, y, scalar)
-
-		self.size = 3 # Size of inventory
-
 	
 	# For debugging purposes
 	def print_items(self):
@@ -29,8 +26,7 @@ class UIInventory(UI):
 		for item in self.inventory:
 			print(item.name)
 
-	# Super class (Sprite) instance draws the textbox
-	# UI class (self) instance draws the text
+	# Draws inventory boxes depending on how many items are present
 	def draw(self, screen):
 		item_pos_x_offset = 0
 

@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = True
+DEBUG = False
 
 class Game():
 	def __init__(self):
@@ -156,8 +156,7 @@ class Game():
 		while self.outro:
 
 			# Draw logo
-			self.sprites.logo.rect = self.player.rect
-			self.sprites.logo.draw(self.screen, self.camera)
+			#self.sprites.logo.draw_end_scene(self.screen, 300, 100)
 
 			# Render all intro images
 			pygame.display.flip()
