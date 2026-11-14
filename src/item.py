@@ -1,15 +1,18 @@
 import pygame
 from sprite import Sprite
 
-# Item child class -> inherits from Sprite class
 class Item(Sprite):
 	def __init__(self, item_name, x, y, scalar, player):
 		super().__init__(f'img/Items/{item_name}.png', x, y, scalar)
-
+		self.player = player
 		self.name = item_name
 
+# Used for items that can be stored in inventory
+class ItemInventory(Item):
+	def __init__(self, item_name, x, y, scalar, player):
+		super().__init__(item_name, x, y, scalar, player)
+
 		self.picked_up = False
-		self.player = player
 
 	def action(self, action_type, groups):
 		if action_type == 'pick up':
@@ -35,8 +38,8 @@ class Item(Sprite):
 
 		print(f'player dropped {self.name}')
 
-# ItemWindow
 
+# Used for window items
 class ItemWindow(Item):
 	def __init__(self, item_name, x, y, scalar, player):
 		super().__init__(item_name, x, y, scalar, player)
@@ -65,7 +68,7 @@ class ItemWindow(Item):
 		self.opened = True
 
 		print(f'player opened {self.name}')
-	
+
 	# Method to close window
 	# Changes image and window state
 	def close_window(self):

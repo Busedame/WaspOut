@@ -1,7 +1,7 @@
 import pygame
 from object_groups import ObjectGroups
 from animation import Animation
-from item import Item, ItemWindow
+from item import ItemInventory, ItemWindow
 import string
 
 # Player class
@@ -105,8 +105,9 @@ class Player(pygame.sprite.Sprite):
 		# Check for enemy collision
 		enemy = self.check_enemy_collision(self.groups.enemies)
 		if enemy:
-			self.sprites.interact_box.action(self, 'capture', enemy)
-			return enemy
+			if self.item_exists_in_inventory('cup') and self.item_exists_in_inventory('paper'):
+				self.sprites.interact_box.action(self, 'capture', enemy)
+				return enemy
 
 		return None
 	
@@ -145,7 +146,7 @@ class Player(pygame.sprite.Sprite):
 			if isinstance(target, ItemWindow):
 				target.action('open', self.groups)
 
-			elif isinstance(target, Item):
+			elif isinstance(target, ItemInventory):
 				target.action('pick up', self.groups)
 			
 			elif isinstance(target, Enemy):
@@ -177,7 +178,7 @@ class Player(pygame.sprite.Sprite):
 
 			for sprite in self.inventory:
 
-				if isinstance(sprite, Item):
+				if isinstance(sprite, ItemInventory):
 					sprite.action('drop', self.groups)
 					return
 

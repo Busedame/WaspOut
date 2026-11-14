@@ -2,7 +2,7 @@ import pygame
 from entity import Player, Enemy
 from background import Background
 from props import Prop
-from item import Item, ItemWindow
+from item import ItemInventory, ItemWindow
 from ui import UI
 
 # Every entity (player, enemy) in the world and their initial position is here.
@@ -28,7 +28,9 @@ class Sprites:
 		# UI
 		self.interact_box = UI('interact_box', 0, 0, 1)
 
-		# Items
-		self.cup = Item('cup', 950, 280, 1, player)
-		self.paper = Item('paper', 100, 400, 1, player)
+		# Inventory items
+		self.cup = ItemInventory('cup', 950, 280, 1, player)
+		self.paper = ItemInventory('paper', 100, 400, 1, player)
+
+		# Window items
 		self.window = ItemWindow('window_tmp', 900, 200, 0.5, player)

@@ -36,6 +36,7 @@ class Game():
 		# Loop booleans
 		self.intro = True
 		self.running = True
+		self.outro = True
 
 		# Framerate calculation
 		self.dt = 0
@@ -66,8 +67,13 @@ class Game():
 	def main_loop(self):
 
 		while self.running:
+
 			self.update()
 			self.render()
+
+			#if not self.groups.enemies.sprites():
+			#	self.end_game()
+			#	self.running = False
 
 			# Check for events
 			for event in pygame.event.get():
@@ -143,4 +149,19 @@ class Game():
 	
 	# Start level over depending on win or lose
 	def end_game(self):
-		pass
+		while self.outro:
+
+			# Draw logo
+			self.sprites.logo.rect = self.player.rect
+			self.sprites.logo.draw(self.screen, self.camera)
+
+			# Render all intro images
+			pygame.display.flip()
+
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_ESCAPE:
+						self.outro = False
+	
+			# Caps the runtime speed to not kill CPU
+			self.clock.tick(60)

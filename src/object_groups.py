@@ -6,6 +6,9 @@ class ObjectGroups:
 		# Intro
 		self.intro = pygame.sprite.Group(sprites.background, sprites.fridge, sprites.press_space, sprites.logo)
 
+		# Outro
+		self.outro = pygame.sprite.Group(sprites.background, sprites.fridge, sprites.logo)
+
 		# Characters
 		self.player = pygame.sprite.GroupSingle(entities.player)
 		self.enemies = pygame.sprite.Group(entities.enemy)
