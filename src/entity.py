@@ -3,6 +3,7 @@ from object_groups import ObjectGroups
 from animation import Animation
 from item import ItemInventory, ItemWindow
 import string
+import random
 
 # Player class
 class Player(pygame.sprite.Sprite):
@@ -93,25 +94,26 @@ class Player(pygame.sprite.Sprite):
 	# Checks if player is colliding with an enemy or an item
 	def check_collision(self):
 
-		# Check for window collision
-		window_item = self.check_item_collision(self.groups.items)
-		if window_item:
-			if isinstance(window_item, ItemWindow):
-				self.sprites.interact_box.action(self, 'window', window_item)
-				return window_item
-
-		# Check for item collision
-		item = self.check_item_collision(self.groups.items)
-		if item:
-			self.sprites.interact_box.action(self, 'pick up', item)
-			return item
-	
 		# Check for enemy collision
 		enemy = self.check_enemy_collision(self.groups.enemies)
 		if enemy:
 			if self.item_exists_in_inventory('cup') and self.item_exists_in_inventory('paper'):
 				self.sprites.interact_box.action(self, 'capture', enemy)
 				return enemy
+
+		# Check for item collision
+		item = self.check_item_collision(self.groups.items)
+		if item:
+			if isinstance(item, ItemInventory):
+				self.sprites.interact_box.action(self, 'pick up', item)
+				return item
+
+		# Check for window collision
+		window_item = self.check_item_collision(self.groups.items)
+		if window_item:
+			if isinstance(window_item, ItemWindow):
+				self.sprites.interact_box.action(self, 'window', window_item)
+				return window_item
 
 		return None
 	
@@ -224,9 +226,13 @@ class Enemy(pygame.sprite.Sprite):
 		# Image
 		self.image = self.animate_idle.img
 
+		# Possible spawn locations
+		self.enemy_x_locations = range(50, 1230) # Hardset to fit into CURRENT WORLD DIMENSIONS.
+		self.enemy_y_locations = range(200, 350) # Hardset to fit into CURRENT WORLD DIMENSIONS.
+
 		# Rectangle size and speed
 		self.rect = self.animate_idle.img.get_rect()
-		self.rect.center = (x, y)
+		self.rect.center = (random.choice(self.enemy_x_locations), random.choice(self.enemy_y_locations)) # Spawn point
 		self.speed = speed
 
 		# Enemy name -> increments by 1 per enemy
@@ -234,7 +240,7 @@ class Enemy(pygame.sprite.Sprite):
 
 		# Boolean indicating if enemy has been captured
 		self.captured = False
-
+	
 
 	#
 	# ///// ENEMY RENDER //////
@@ -260,15 +266,35 @@ class Enemy(pygame.sprite.Sprite):
 
 	# Handles when enemy is captured
 	def capture(self, groups):
+
+		# Debug print
+		print(f'player captured {self.name}')
+
+		# Update enemy state
 		self.captured = True
+		
+		# Add to inventory
 		groups.inventory.add(self)
+
+		# Remove from groups
 		groups.rendered.remove(self)
 		groups.enemies.remove(self) # Needs to change at some point =)
-
-		print(f'player captured {self.name}')
 	
 	# Handles when enemy is released through window
 	def release(self, player):
+
+		# Debug print
+		print(f'player released {self.name}')
+
+		# Remove from inventory
 		player.groups.inventory.remove(self)
 
-		print(f'player released {self.name}')
+		# Respawn
+		self.rect.center = (random.choice(self.enemy_x_locations), random.choice(self.enemy_y_locations))
+
+		# Update enemy state
+		self.captured = False
+
+		# Re-add to groups
+		player.groups.rendered.add(self)
+		player.groups.enemies.add(self)
