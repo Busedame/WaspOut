@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
 		self.animate_move = Animation(char_type, 'Move', 2, cooldown)
 		self.animate_interact = Animation(char_type, 'Interact', 5, cooldown * 2)
+		self.animate_climb = Animation(char_type, 'Climb', 2, cooldown)
 
 		# Rectangle size and speed
 		self.rect = self.animate_idle.img.get_rect()
@@ -56,9 +57,11 @@ class Player(pygame.sprite.Sprite):
 		#if self.interaction:
 		#	screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 		
-		if self.rect.y != self.min_y and self.rect.y != self.max_y:
-			self.animate_interact.update()
-			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
+		# Climb image
+		if self.using_ladder():
+			if self.moving_up or self.moving_down:
+				self.animate_climb.update()
+			screen.blit(self.animate_climb.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 	
 		# Move image -> flips image depending on if it's moving left or right
 		elif self.moving_right or self.moving_left:

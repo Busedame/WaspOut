@@ -35,9 +35,6 @@ class Camera(object):
 
 		# Player position relative to the screen
 		player_screen_x = self.player.rect.x - self.offset_x
-		
-		# Player center relative to screen
-		player_screen_center_y = self.player.rect.centery - self.offset_y
 
 		# Left margin
 		if player_screen_x < self.player_margin_left:
@@ -53,7 +50,7 @@ class Camera(object):
 		#### Y-AXIS ####
 
 		# Determine target camera position based on player position
-		if self.player.rect.y < 300:
+		if self.player.rect.y < 400:
 			target_y = 0
 		else:
 			target_y = self.rect.h
