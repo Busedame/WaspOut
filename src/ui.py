@@ -54,22 +54,22 @@ class UIInteractionBox(UI):
 	# Interaction box -> handle pick up item
 	def pick_up(self, player, item):
 		if not item.picked_up:
-			self.text = self.text_font.render(f'pick up {item.name}: w', True, (255, 255, 255))
+			self.text = self.text_font.render(f'pick up {item.name}: e', True, (255, 255, 255))
 		else:
 			self.text = None
 
 	# Interaction box -> handle capture enemy
 	def capture(self, player, enemy):
-		self.text = self.text_font.render(f'capture wasp: w', True, (255, 255, 255))
+		self.text = self.text_font.render(f'capture wasp: e', True, (255, 255, 255))
 
 	# Interaction box -> handle open or close window, or release enemy through window
 	def window(self, player, target):
 		if not target.opened:
-			self.text = self.text_font.render(f'open {target.name}: w', True, (255, 255, 255))
+			self.text = self.text_font.render(f'open {target.name}: e', True, (255, 255, 255))
 		elif target.opened and player.enemy_captured:
-			self.text = self.text_font.render(f'release wasp: s', True, (255, 255, 255))
+			self.text = self.text_font.render(f'release wasp: x', True, (255, 255, 255))
 		else:
-			self.text = self.text_font.render(f'close {target.name}: s', True, (255, 255, 255))
+			self.text = self.text_font.render(f'close {target.name}: x', True, (255, 255, 255))
 
 	# Super class (Sprite) instance draws the textbox
 	# UI class (self) instance draws the text
@@ -77,4 +77,4 @@ class UIInteractionBox(UI):
 		if self.text is not None:
 			super().draw(screen, camera)
 			text_rect = self.text.get_rect(center=self.rect.center)
-			screen.blit(self.text, (text_rect.x - camera.offset_x, text_rect.y))
+			screen.blit(self.text, (text_rect.x - camera.offset_x, text_rect.y - camera.offset_y))

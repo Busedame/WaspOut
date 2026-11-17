@@ -32,7 +32,10 @@ class Player(pygame.sprite.Sprite):
 		# Moving directions
 		self.moving_right = False
 		self.moving_left = False
-		self.direction = 1 # -1 for left, 1 for right
+		self.moving_up = False
+		self.moving_down = False
+		self.x_direction = 1 # -1 for left, 1 for right
+		self.y_direction = 1 # 1 for down, -1 for up
 		self.flip = False
 
 		# Interactions
@@ -48,18 +51,22 @@ class Player(pygame.sprite.Sprite):
 	def draw(self, screen, camera):
 		# Blit entity on screen relative to camera position:
 
-		if self.interaction:
-			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y))
+		#if self.interaction:
+		#	screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
+		
+		if self.moving_up or self.moving_down:
+			self.animate_interact.update()
+			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 	
 		# Move image -> flips image depending on if it's moving left or right
-		if self.moving_right or self.moving_left:
+		elif self.moving_right or self.moving_left:
 			self.animate_move.update()
-			screen.blit(pygame.transform.flip(self.animate_move.img, self.flip, False), (self.rect.x - camera.offset_x, self.rect.y))
+			screen.blit(pygame.transform.flip(self.animate_move.img, self.flip, False), (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 
 		# Idle image
 		else:
 			self.animate_idle.update()
-			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 
 
 	#
@@ -69,22 +76,34 @@ class Player(pygame.sprite.Sprite):
 	# Moves player rect depending on direction and speed
 	def move(self, world_width):
 		dx = 0
+		dy = 0
 
 		if self.moving_left:
 			dx = self.speed
 			self.flip = False
-			self.direction = -1
+			self.x_direction = -1
 	
 		if self.moving_right:
 			dx = self.speed
 			self.flip = True
-			self.direction = 1
+			self.x_direction = 1
+
+		if self.moving_up:
+			dy = self.speed
+			self.y_direction = -1
+
+		if self.moving_down:
+			dy = self.speed
+			self.y_direction = 1
+
 
 		# Updates player world position
-		self.rect.x += dx * self.direction # Velocity
+		self.rect.x += dx * self.x_direction # Velocity
+		self.rect.y += dy * self.y_direction # Velocity
 
 		# Blocks player from moving out of world
 		self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
+		self.rect.y = max(200, min(self.rect.y, 680))
 
 
 	#
@@ -249,7 +268,7 @@ class Enemy(pygame.sprite.Sprite):
 	def draw(self, screen, camera):
 		if not self.captured:
 			self.animate_idle.update()
-			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y))
+			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 
 
 	#

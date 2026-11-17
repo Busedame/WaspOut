@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = True
+DEBUG = False
 
 class Game():
 	def __init__(self):
@@ -84,10 +84,10 @@ class Game():
 				# Player actions
 				if event.type == pygame.KEYDOWN:
 					# Picking up item, capturing enemy or opening window
-					if event.key == pygame.K_w:
+					if event.key == pygame.K_e:
 						self.player.interaction = 'interact'
 					# Dropping item, releasing enemy or closing window
-					elif event.key == pygame.K_s:
+					elif event.key == pygame.K_x:
 						self.player.interaction = 'inventory'
 					# Moving right
 					elif event.key == pygame.K_d:
@@ -95,6 +95,12 @@ class Game():
 					# Moving left
 					elif event.key == pygame.K_a:
 						self.player.moving_left = True
+					# Moving up
+					elif event.key == pygame.K_w:
+						self.player.moving_up = True
+					# Moving down
+					elif event.key == pygame.K_s:
+						self.player.moving_down = True
 					# Exit game
 					if event.key == pygame.K_ESCAPE:
 						self.running = False
@@ -104,6 +110,10 @@ class Game():
 						self.player.moving_right = False
 					if event.key == pygame.K_a:
 						self.player.moving_left = False
+					if event.key == pygame.K_w:
+						self.player.moving_up = False
+					if event.key == pygame.K_s:
+						self.player.moving_down = False
 
 			# Get delta time
 			self.dt = self.clock.tick(60) / 1000
@@ -119,12 +129,12 @@ class Game():
 		self.collision = self.player.check_collision()
 
 		# Move the player
-		if self.player.moving_right or self.player.moving_left:
+		if self.player.moving_right or self.player.moving_left or \
+			self.player.moving_down or self.player.moving_up:
 			self.player.move(self.window_width * 3)
 	
 		if self.player.interaction:
 			self.player.handle_interaction(self.collision)
-			self.player.interaction = None
 
 		# Move the camera
 		self.camera.move()
@@ -150,6 +160,9 @@ class Game():
 
 		# Render all images
 		pygame.display.flip()
+
+		if self.player.interaction:
+			self.player.interaction = None
 
 	# Start level over depending on win or lose
 	def end_game(self):

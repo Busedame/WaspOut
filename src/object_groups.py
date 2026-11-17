@@ -44,6 +44,7 @@ class ObjectGroups:
 		# All objects currently rendered (can be bg_upstairs, items, props)
 		self.rendered = pygame.sprite.Group(
 			sprites.bg_upstairs,
+			sprites.bg_downstairs,
 			sprites.ladder,
 			sprites.fridge,
 			sprites.oven,

@@ -18,7 +18,7 @@ class Sprites:
 
 		# Background
 		self.bg_upstairs = Background('bg', window_width + (window_width / 2), window_height / 2, 1)
-		self.bg_downstairs = Background('bg2', window_width + (window_width / 2), window_height / 2, 1)
+		self.bg_downstairs = Background('bg2', window_width + (window_width / 2), window_height + (window_height / 2), 1)
 
 		# Start text (temp just for fun)
 		self.press_space = Prop('press_space', 320, 330, 1)
@@ -33,11 +33,11 @@ class Sprites:
 		self.inventory = UIInventory('inventory_slot', window_width - 15, window_height - 15, 1)
 
 		# Inventory items
-		self.cup = ItemInventory('cup', 1250, 280, 1, player)
+		self.cup = ItemInventory('cup', 1250, 760, 1, player)
 		self.paper = ItemInventory('paper', 700, 400, 1, player)
 
 		# Window items
-		self.window = ItemWindow('window', 1200, 200, 0.5, player)
+		self.window = ItemWindow('window', 1200, 680, 0.5, player)
 
 		# Items
-		self.ladder = Item('ladder', 50, 480, 0.5, player)
+		self.ladder = Item('ladder', 50, 600, 0.80, player)

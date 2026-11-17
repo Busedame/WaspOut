@@ -11,4 +11,4 @@ class Sprite(pygame.sprite.Sprite):
 	
 	def draw(self, screen, camera):
 		# Blits sprite on screen relative to camera position
-		screen.blit(self.image, (self.rect.x - camera.offset_x, self.rect.y))
+		screen.blit(self.image, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
