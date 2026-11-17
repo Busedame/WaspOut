@@ -2,7 +2,7 @@ import pygame
 from entity import Player, Enemy
 from background import Background
 from props import Prop
-from item import ItemInventory, ItemWindow, Item
+from item import ItemInventory, ItemWindow, ItemLadder
 from ui import UIInteractionBox, UIInventory
 
 # Every entity (player, enemy) in the world and their initial position is here.
@@ -40,4 +40,4 @@ class Sprites:
 		self.window = ItemWindow('window', 1200, 680, 0.5, player)
 
 		# Items
-		self.ladder = Item('ladder', 50, 600, 0.80, player)
+		self.ladder = ItemLadder('ladder', 50, 600, 0.80, player)

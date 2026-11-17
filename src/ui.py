@@ -78,3 +78,4 @@ class UIInteractionBox(UI):
 			super().draw(screen, camera)
 			text_rect = self.text.get_rect(center=self.rect.center)
 			screen.blit(self.text, (text_rect.x - camera.offset_x, text_rect.y - camera.offset_y))
+			self.text = None

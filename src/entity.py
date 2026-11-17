@@ -28,6 +28,9 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.animate_idle.img.get_rect()
 		self.rect.center = (x, y)
 		self.speed = speed
+
+		self.min_y = 200
+		self.max_y = 680
 		
 		# Moving directions
 		self.moving_right = False
@@ -42,7 +45,6 @@ class Player(pygame.sprite.Sprite):
 		self.interaction = None
 		self.enemy_captured = False
 
-
 	#
 	# ///// PLAYER RENDER //////
 	#
@@ -54,7 +56,7 @@ class Player(pygame.sprite.Sprite):
 		#if self.interaction:
 		#	screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 		
-		if self.moving_up or self.moving_down:
+		if self.rect.y != self.min_y and self.rect.y != self.max_y:
 			self.animate_interact.update()
 			screen.blit(self.animate_interact.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 	
@@ -78,32 +80,34 @@ class Player(pygame.sprite.Sprite):
 		dx = 0
 		dy = 0
 
-		if self.moving_left:
-			dx = self.speed
-			self.flip = False
-			self.x_direction = -1
+		if self.rect.y == self.min_y or self.rect.y == self.max_y:
+			if self.moving_left:
+				dx = self.speed
+				self.flip = False
+				self.x_direction = -1
 	
-		if self.moving_right:
-			dx = self.speed
-			self.flip = True
-			self.x_direction = 1
+			if self.moving_right:
+				dx = self.speed
+				self.flip = True
+				self.x_direction = 1
+			
+			# Updates player world position
+			self.rect.x += dx * self.x_direction # Velocity
 
-		if self.moving_up:
-			dy = self.speed
-			self.y_direction = -1
+			# Blocks player from moving out of world
+			self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
+		
+		if self.check_ladder_collision():
+			if self.moving_up:
+				dy = self.speed
+				self.y_direction = -1
 
-		if self.moving_down:
-			dy = self.speed
-			self.y_direction = 1
-
-
-		# Updates player world position
-		self.rect.x += dx * self.x_direction # Velocity
-		self.rect.y += dy * self.y_direction # Velocity
-
-		# Blocks player from moving out of world
-		self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
-		self.rect.y = max(200, min(self.rect.y, 680))
+			if self.moving_down:
+				dy = self.speed
+				self.y_direction = 1
+			
+			self.rect.y += dy * self.y_direction # Velocity
+			self.rect.y = max(self.min_y, min(self.rect.y, self.max_y))
 
 
 	#
@@ -122,20 +126,35 @@ class Player(pygame.sprite.Sprite):
 
 		# Check for item collision
 		item = self.check_item_collision(self.groups.items)
+
 		if item:
+
+			# Check for inventory item collision
 			if isinstance(item, ItemInventory):
 				self.sprites.interact_box.action(self, 'pick up', item)
-				return item
+	
+			# Check for window collision
+			elif isinstance(item, ItemWindow):
+				self.sprites.interact_box.action(self, 'window', item)
 
-		# Check for window collision
-		window_item = self.check_item_collision(self.groups.items)
-		if window_item:
-			if isinstance(window_item, ItemWindow):
-				self.sprites.interact_box.action(self, 'window', window_item)
-				return window_item
+			return item
 
 		return None
-	
+
+	def check_ladder_collision(self):
+
+		ladder = self.sprites.ladder.hitbox
+		
+		# Going upstairs -> checks if middle of player rect intersects with ladder's collide rect.
+		if ladder.collidepoint(self.rect.centerx, self.rect.centery):
+			return True
+		
+		# Going downstairs -> checks if bottom of player rect intersects with ladder's collide rect.
+		elif ladder.collidepoint(self.rect.centerx, self.rect.bottom):
+			return True
+
+		return False
+
 	# Checks if player is colliding with an item
 	# Returns the smallest rectangle item, if any
 	def check_item_collision(self, items):
@@ -209,6 +228,7 @@ class Player(pygame.sprite.Sprite):
 						return
 
 
+
 	#
 	# ///// HELPER FUNCTIONS //////
 	#
@@ -220,7 +240,11 @@ class Player(pygame.sprite.Sprite):
 				return True
 
 		return False
-
+	
+	def using_ladder(self):
+		if self.rect.y == self.min_y or self.rect.y == self.max_y:
+			return False
+		return True
 
 
 # Enemy class

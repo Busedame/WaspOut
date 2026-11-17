@@ -3,6 +3,7 @@ from objects import Sprites, Entities
 from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
+from item import ItemLadder
 
 DEBUG = False
 
@@ -84,10 +85,10 @@ class Game():
 				# Player actions
 				if event.type == pygame.KEYDOWN:
 					# Picking up item, capturing enemy or opening window
-					if event.key == pygame.K_e:
+					if event.key == pygame.K_e and not self.player.using_ladder():
 						self.player.interaction = 'interact'
 					# Dropping item, releasing enemy or closing window
-					elif event.key == pygame.K_x:
+					elif event.key == pygame.K_x and not self.player.using_ladder():
 						self.player.interaction = 'inventory'
 					# Moving right
 					elif event.key == pygame.K_d:
@@ -129,8 +130,8 @@ class Game():
 		self.collision = self.player.check_collision()
 
 		# Move the player
-		if self.player.moving_right or self.player.moving_left or \
-			self.player.moving_down or self.player.moving_up:
+		if self.player.moving_down or self.player.moving_up \
+			or self.player.moving_right or self.player.moving_left:
 			self.player.move(self.window_width * 3)
 	
 		if self.player.interaction:

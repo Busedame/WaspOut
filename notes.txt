@@ -118,4 +118,5 @@ Functionality I need:
 
 Functionality I need (14.11.26):
 - Player scoring system (how many wasps are caught -> maybe store locally?)
-- Upstairs, downstairs
+- Ladder constricting going upstairs and downstairs
+- Window animation

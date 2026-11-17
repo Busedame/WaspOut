@@ -7,6 +7,19 @@ class Item(Sprite):
 		self.player = player # Player instance
 		self.name = item_name # Name of item
 
+class ItemLadder(Item):
+	def __init__(self, item_name, x, y, scalar, player):
+		super().__init__(item_name, x, y, scalar, player)
+
+		# Hitbox: middle 50% of ladder width (to make the player more realistically moving in ladder).
+		# pygame.Rect(left, top, width, height)
+		self.hitbox = pygame.Rect(
+			self.rect.centerx - self.rect.width // 2.5, # // means forced integer divison -> so no remainder
+			self.rect.top,
+			self.rect.width // 2,
+			self.rect.height
+		)
+
 # Used for items that can be stored in inventory
 class ItemInventory(Item):
 	def __init__(self, item_name, x, y, scalar, player):
