@@ -18,7 +18,8 @@ class Camera(object):
 
 		# Min/max camera scroll
 		self.min_scroll = 0 # Can never go below 0.
-		self.max_scroll = self.rect.w # Can never go above window-size 640 (cause world is 2 * window size).
+		self.max_scroll = self.rect.w * 2 # Can never go above window-size 640 * 2 = 1280 (cause world is 3 * window size), so camera can
+		# move in total "two windows".
 
 	def move(self):
 		# player.rect.x -> player's world position

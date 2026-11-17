@@ -4,7 +4,7 @@ from object_groups import ObjectGroups
 from camera import Camera
 from debug import debug
 
-DEBUG = False
+DEBUG = True
 
 class Game():
 	def __init__(self):
@@ -120,7 +120,7 @@ class Game():
 
 		# Move the player
 		if self.player.moving_right or self.player.moving_left:
-			self.player.move()
+			self.player.move(self.window_width * 3)
 	
 		if self.player.interaction:
 			self.player.handle_interaction(self.collision)

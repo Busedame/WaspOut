@@ -29,6 +29,7 @@ class ObjectGroups:
 		self.upstairs = pygame.sprite.Group(
 			sprites.background,
 			sprites.fridge,
+			sprites.oven,
 			sprites.window,
 			sprites.cup,
 			sprites.paper,
@@ -41,6 +42,7 @@ class ObjectGroups:
 		self.rendered = pygame.sprite.Group(
 			sprites.background,
 			sprites.fridge,
+			sprites.oven,
 			sprites.window,
 			sprites.cup,
 			sprites.paper

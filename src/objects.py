@@ -16,7 +16,7 @@ class Entities:
 class Sprites:
 	def __init__(self, window_width, window_height, player):
 		# Background
-		self.background = Background('bg', window_width, window_height / 2, 1)
+		self.background = Background('bg', window_width + (window_width / 2), window_height / 2, 1)
 
 		# Start text (temp just for fun)
 		self.press_space = Prop('press_space', 320, 330, 1)
@@ -24,6 +24,7 @@ class Sprites:
 
 		# Props
 		self.fridge = Prop('fridge', 200, 260, 0.70)
+		self.oven = Prop('oven', 350, 310, 0.80)
 
 		# UI
 		self.interact_box = UIInteractionBox('interact_box', 0, 0, 1)
