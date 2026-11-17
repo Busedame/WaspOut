@@ -4,10 +4,10 @@ import pygame
 class ObjectGroups:
 	def __init__(self, sprites, entities):
 		# Intro
-		self.intro = pygame.sprite.Group(sprites.background, sprites.fridge, sprites.press_space, sprites.logo)
+		self.intro = pygame.sprite.Group(sprites.bg_upstairs, sprites.fridge, sprites.press_space, sprites.logo)
 
 		# Outro
-		self.outro = pygame.sprite.Group(sprites.background, sprites.fridge, sprites.logo)
+		self.outro = pygame.sprite.Group(sprites.bg_upstairs, sprites.fridge, sprites.logo)
 
 		# Characters
 		self.player = pygame.sprite.GroupSingle(entities.player)
@@ -27,7 +27,7 @@ class ObjectGroups:
 
 		# Objects belonging to each floor
 		self.upstairs = pygame.sprite.Group(
-			sprites.background,
+			sprites.bg_upstairs,
 			sprites.fridge,
 			sprites.oven,
 			sprites.window,
@@ -36,11 +36,15 @@ class ObjectGroups:
 			entities.enemy,
 			entities.player
 		)
-		self.downstairs = pygame.sprite.Group()
+		self.downstairs = pygame.sprite.Group(
+			sprites.bg_downstairs,
+			sprites.ladder
+		)
 
-		# All objects currently rendered (can be background, items, props)
+		# All objects currently rendered (can be bg_upstairs, items, props)
 		self.rendered = pygame.sprite.Group(
-			sprites.background,
+			sprites.bg_upstairs,
+			sprites.ladder,
 			sprites.fridge,
 			sprites.oven,
 			sprites.window,

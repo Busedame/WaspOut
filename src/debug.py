@@ -5,9 +5,9 @@ from camera import Camera
 def debug(entities: Entities, sprites: Sprites, camera: Camera):
 
 	# STATIC COMPONENTS
-	print('BACKGROUND')
-	print('center: ', sprites.background.rect.center)
-	print('x: ', sprites.background.rect.x, 'y: ', sprites.background.rect.y, 'width: ', sprites.background.rect.w, 'height: ', sprites.background.rect.h)
+	print('BACKGROUND UPSTAIRS')
+	print('center: ', sprites.bg_upstairs.rect.center)
+	print('x: ', sprites.bg_upstairs.rect.x, 'y: ', sprites.bg_upstairs.rect.y, 'width: ', sprites.bg_upstairs.rect.w, 'height: ', sprites.bg_upstairs.rect.h)
 
 	# DYNAMIC COMPONENTS
 	print('CAMERA')
@@ -28,7 +28,7 @@ def debug(entities: Entities, sprites: Sprites, camera: Camera):
 	print('Camera left margin: ', camera.player_margin_left)
 	print('Camera right margin: ', camera.player_margin_right)
 	print('Player screen x: ', entities.player.rect.x - camera.offset_x)
-	print('Background x: ', sprites.background.rect.x - camera.offset_x)
+	print('Background upstairs x: ', sprites.bg_upstairs.rect.x - camera.offset_x)
 	print('Window x: ', sprites.window.rect.x - camera.offset_x)
 	print('Enemy x: ', entities.enemy.rect.x - camera.offset_x)
 

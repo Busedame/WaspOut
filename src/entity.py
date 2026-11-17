@@ -227,7 +227,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.image = self.animate_idle.img
 
 		# Possible spawn locations
-		self.enemy_x_locations = range(50, 1230) # Hardset to fit into CURRENT WORLD DIMENSIONS.
+		self.enemy_x_locations = range(50, 1870) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 		self.enemy_y_locations = range(200, 350) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 
 		# Rectangle size and speed
