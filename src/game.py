@@ -85,10 +85,10 @@ class Game():
 				# Player actions
 				if event.type == pygame.KEYDOWN:
 					# Picking up item, capturing enemy or opening window
-					if event.key == pygame.K_e and not self.player.using_ladder():
+					if event.key == pygame.K_e:
 						self.player.interaction = 'interact'
 					# Dropping item, releasing enemy or closing window
-					elif event.key == pygame.K_x and not self.player.using_ladder():
+					elif event.key == pygame.K_r:
 						self.player.interaction = 'inventory'
 					# Moving right
 					elif event.key == pygame.K_d:

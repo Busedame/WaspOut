@@ -30,8 +30,10 @@ class Player(pygame.sprite.Sprite):
 		self.rect.center = (x, y)
 		self.speed = speed
 
-		self.min_y = 200
-		self.max_y = 680
+		# y coordinates restrictions
+		# Unless player is in ladder, it can ONLY move sideways if it is one of these two y values.
+		self.min_y = 200 # Minimum player y coordinate
+		self.max_y = 680 # Maximum player y coordinate
 		
 		# Moving directions
 		self.moving_right = False
@@ -135,12 +137,12 @@ class Player(pygame.sprite.Sprite):
 			# Check for inventory item collision
 			if isinstance(item, ItemInventory):
 				self.sprites.interact_box.action(self, 'pick up', item)
+				return item
 	
 			# Check for window collision
 			elif isinstance(item, ItemWindow):
 				self.sprites.interact_box.action(self, 'window', item)
-
-			return item
+				return item
 
 		return None
 
@@ -148,11 +150,11 @@ class Player(pygame.sprite.Sprite):
 
 		ladder = self.sprites.ladder.hitbox
 		
-		# Going upstairs -> checks if middle of player rect intersects with ladder's collide rect.
+		# Going upstairs -> checks if middle of player rect intersects with ladder's hitbox.
 		if ladder.collidepoint(self.rect.centerx, self.rect.centery):
 			return True
 		
-		# Going downstairs -> checks if bottom of player rect intersects with ladder's collide rect.
+		# Going downstairs -> checks if bottom of player rect intersects with ladder's hitbox.
 		elif ladder.collidepoint(self.rect.centerx, self.rect.bottom):
 			return True
 
@@ -187,6 +189,9 @@ class Player(pygame.sprite.Sprite):
 
 	def handle_interaction(self, target):
 		
+		if self.using_ladder():
+			return
+
 		# interact == pick up, capture, open
 		if self.interaction == 'interact':
 

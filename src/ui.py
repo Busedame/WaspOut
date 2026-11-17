@@ -67,9 +67,9 @@ class UIInteractionBox(UI):
 		if not target.opened:
 			self.text = self.text_font.render(f'open {target.name}: e', True, (255, 255, 255))
 		elif target.opened and player.enemy_captured:
-			self.text = self.text_font.render(f'release wasp: x', True, (255, 255, 255))
+			self.text = self.text_font.render(f'release wasp: r', True, (255, 255, 255))
 		else:
-			self.text = self.text_font.render(f'close {target.name}: x', True, (255, 255, 255))
+			self.text = self.text_font.render(f'close {target.name}: r', True, (255, 255, 255))
 
 	# Super class (Sprite) instance draws the textbox
 	# UI class (self) instance draws the text
