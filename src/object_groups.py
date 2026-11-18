@@ -4,7 +4,26 @@ import pygame
 class ObjectGroups:
 	def __init__(self, sprites, entities):
 		# Intro
-		self.intro = pygame.sprite.Group(sprites.bg_upstairs, sprites.fridge, sprites.press_space, sprites.logo)
+		self.intro = pygame.sprite.Group(
+			sprites.bg_upstairs,
+			sprites.bg_downstairs,
+			sprites.ladder,
+			sprites.kitchen_picture,
+			sprites.fridge,
+			sprites.kettle,
+			sprites.oven,
+			sprites.plates,
+			sprites.kitchen_counter1,
+			sprites.kitchen_counter2,
+			sprites.kitchen_counter3,
+			sprites.sink,
+			sprites.window,
+			sprites.cup,
+			sprites.paper,
+			sprites.knife,
+			sprites.logo,
+			sprites.press_space
+		)
 
 		# Outro
 		self.outro = pygame.sprite.Group(sprites.bg_upstairs, sprites.fridge, sprites.logo)
@@ -14,13 +33,13 @@ class ObjectGroups:
 		self.enemies = pygame.sprite.Group(entities.enemy)
 
 		# All items in game
-		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper, sprites.ladder)
+		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper, sprites.ladder, sprites.knife)
 
 		# Items currently carried
 		self.inventory = pygame.sprite.Group()
 
 		# Props
-		self.props = pygame.sprite.Group(sprites.fridge)
+		self.props = pygame.sprite.Group(sprites.fridge, sprites.kitchen_picture, sprites.oven, sprites.kitchen_counter1, sprites.kitchen_counter2, sprites.kitchen_counter3, sprites.sink, sprites.plates, sprites.kettle)
 
 		# UI
 		self.UI = pygame.sprite.Group(sprites.interact_box, sprites.inventory)
@@ -46,11 +65,19 @@ class ObjectGroups:
 			sprites.bg_upstairs,
 			sprites.bg_downstairs,
 			sprites.ladder,
+			sprites.kitchen_picture,
 			sprites.fridge,
+			sprites.kettle,
 			sprites.oven,
+			sprites.plates,
+			sprites.kitchen_counter1,
+			sprites.kitchen_counter2,
+			sprites.kitchen_counter3,
+			sprites.sink,
 			sprites.window,
 			sprites.cup,
-			sprites.paper
+			sprites.paper,
+			sprites.knife
 		)
 
 		# Assign properties to player

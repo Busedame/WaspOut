@@ -2,7 +2,7 @@ import pygame
 from entity import Player, Enemy
 from background import Background
 from props import Prop
-from item import ItemInventory, ItemWindow, ItemLadder
+from item import ItemInventory, ItemWindow, ItemLadder, Item
 from ui import UIInteractionBox, UIInventory
 
 # Every entity (player, enemy) in the world and their initial position is here.
@@ -22,11 +22,18 @@ class Sprites:
 
 		# Start text (temp just for fun)
 		self.press_space = Prop('press_space', 320, 330, 1)
-		self.logo = Prop('logo', 420, 200, 1)
+		self.logo = Prop('logo', 120, 200, 1)
 
 		# Props
-		self.fridge = Prop('fridge', 200, 260, 0.70)
-		self.oven = Prop('oven', 350, 310, 0.80)
+		self.fridge = Prop('fridge', 300, 275, 0.70)
+		self.oven = Prop('oven', 430, 320, 0.80)
+		self.kitchen_counter1 = Prop('kitchen_counter_1', 550, 320, 0.80)
+		self.kitchen_counter2 = Prop('kitchen_counter_2', 670, 320, 0.80)
+		self.sink = Prop('sink', 650, 235, 0.70)
+		self.plates = Prop('plates', 690, 245, 0.70)
+		self.kettle = Prop('kettle', 450, 255, 0.80)
+		self.kitchen_counter3 = Prop('kitchen_counter_1', 790, 320, 0.80)
+		self.kitchen_picture = Prop('kitchen_picture', 560, 150, 1)
 
 		# UI
 		self.interact_box = UIInteractionBox('interact_box', 0, 0, 1)
@@ -35,6 +42,7 @@ class Sprites:
 		# Inventory items
 		self.cup = ItemInventory('cup', 1250, 760, 1, player)
 		self.paper = ItemInventory('paper', 700, 400, 1, player)
+		self.knife = ItemInventory('knife', 790, 260, 1, player)
 
 		# Window items
 		self.window = ItemWindow('window', 1200, 680, 0.5, player)
