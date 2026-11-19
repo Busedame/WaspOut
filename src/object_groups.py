@@ -40,7 +40,7 @@ class ObjectGroups:
 		self.inventory = pygame.sprite.Group()
 
 		# Props
-		self.props = pygame.sprite.Group(sprites.fridge, sprites.kitchen_picture, sprites.oven, sprites.kitchen_counter1, sprites.kitchen_counter2, sprites.kitchen_counter3, sprites.sink, sprites.plates, sprites.kettle, sprites.flower)
+		self.props = pygame.sprite.Group(sprites.fridge, sprites.kitchen_picture, sprites.oven, sprites.kitchen_counter1, sprites.kitchen_counter2, sprites.kitchen_counter3, sprites.sink, sprites.plates, sprites.kettle, sprites.flower, sprites.bed)
 
 		# UI
 		self.UI = pygame.sprite.Group(sprites.interact_box, sprites.inventory)
@@ -79,7 +79,8 @@ class ObjectGroups:
 			sprites.window,
 			sprites.cup,
 			sprites.paper,
-			sprites.knife
+			sprites.knife,
+			sprites.bed
 		)
 
 		# Assign properties to player

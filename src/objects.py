@@ -35,6 +35,7 @@ class Sprites:
 		self.kettle = Prop('kettle', 450, 255, 0.80)
 		self.kitchen_counter3 = Prop('kitchen_counter_1', 790, 320, 0.80)
 		self.kitchen_picture = Prop('kitchen_picture', 560, 150, 1)
+		self.bed = Prop('bed', 1785, 800, 0.90)
 
 		# UI
 		self.interact_box = UIInteractionBox('interact_box', 0, 0, 1)
