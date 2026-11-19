@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
 	#
 
 	# Moves player rect depending on direction and speed
-	def move(self, world_width):
+	def move(self, world_width, dt):
 		dx = 0
 		dy = 0
 
@@ -90,14 +90,14 @@ class Player(pygame.sprite.Sprite):
 				dx = self.speed
 				self.flip = False
 				self.x_direction = -1
-	
+
 			if self.moving_right:
 				dx = self.speed
 				self.flip = True
 				self.x_direction = 1
-			
+
 			# Updates player world position
-			self.rect.x += dx * self.x_direction # Velocity
+			self.rect.x += dx * (60 * dt) * self.x_direction # Velocity
 
 			# Blocks player from moving out of world
 			self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))

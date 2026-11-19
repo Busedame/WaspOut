@@ -11,6 +11,7 @@ class ObjectGroups:
 			sprites.kitchen_picture,
 			sprites.fridge,
 			sprites.kettle,
+			sprites.flower,
 			sprites.oven,
 			sprites.plates,
 			sprites.kitchen_counter1,
@@ -39,7 +40,7 @@ class ObjectGroups:
 		self.inventory = pygame.sprite.Group()
 
 		# Props
-		self.props = pygame.sprite.Group(sprites.fridge, sprites.kitchen_picture, sprites.oven, sprites.kitchen_counter1, sprites.kitchen_counter2, sprites.kitchen_counter3, sprites.sink, sprites.plates, sprites.kettle)
+		self.props = pygame.sprite.Group(sprites.fridge, sprites.kitchen_picture, sprites.oven, sprites.kitchen_counter1, sprites.kitchen_counter2, sprites.kitchen_counter3, sprites.sink, sprites.plates, sprites.kettle, sprites.flower)
 
 		# UI
 		self.UI = pygame.sprite.Group(sprites.interact_box, sprites.inventory)
@@ -74,6 +75,7 @@ class ObjectGroups:
 			sprites.kitchen_counter2,
 			sprites.kitchen_counter3,
 			sprites.sink,
+			sprites.flower,
 			sprites.window,
 			sprites.cup,
 			sprites.paper,

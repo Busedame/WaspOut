@@ -128,3 +128,4 @@ Functionality I need (17.11.26):
 - Add props like "knife"
 - Window animation
 - Sound effects
+- Make new wasp

@@ -31,6 +31,7 @@ class Sprites:
 		self.kitchen_counter2 = Prop('kitchen_counter_2', 670, 320, 0.80)
 		self.sink = Prop('sink', 650, 235, 0.70)
 		self.plates = Prop('plates', 690, 245, 0.70)
+		self.flower = Prop('flower', 560, 232, 0.80)
 		self.kettle = Prop('kettle', 450, 255, 0.80)
 		self.kitchen_counter3 = Prop('kitchen_counter_1', 790, 320, 0.80)
 		self.kitchen_picture = Prop('kitchen_picture', 560, 150, 1)
