@@ -129,7 +129,7 @@ class Player(pygame.sprite.Sprite):
 		# Check for enemy collision
 		enemy = self.check_enemy_collision(self.groups.enemies)
 		if enemy:
-			if self.item_exists_in_inventory('cup') and self.item_exists_in_inventory('paper'):
+			if self.item_exists_in_inventory('glass') and self.item_exists_in_inventory('paper'):
 				self.sprites.interact_box.action(self, 'capture', enemy)
 				return enemy
 
@@ -206,7 +206,7 @@ class Player(pygame.sprite.Sprite):
 				target.action('pick up', self.groups)
 			
 			elif isinstance(target, Enemy):
-				if not self.item_exists_in_inventory('cup') \
+				if not self.item_exists_in_inventory('glass') \
 				or not self.item_exists_in_inventory('paper'):
 					print('OUCH!')
 					return
@@ -277,12 +277,13 @@ class Enemy(pygame.sprite.Sprite):
 	
 		# Animation
 		self.animate_idle = Animation(char_type, 'Idle', 3, cooldown)
+		self.animate_move = Animation(char_type, 'Move', 3, cooldown)
 
 		# Image
 		self.image = self.animate_idle.img
 
 		# Possible spawn locations
-		self.enemy_x_locations = range(50, 1470) # Hardset to fit into CURRENT WORLD DIMENSIONS.
+		self.enemy_x_locations = range(50, 1370) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 		self.enemy_y_locations = range(200, 350) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 
 		# Rectangle size and speed
@@ -307,9 +308,8 @@ class Enemy(pygame.sprite.Sprite):
 
 	def draw(self, screen, camera):
 		if not self.captured:
-			self.animate_idle.update()
-			screen.blit(self.animate_idle.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
-
+			self.animate_move.update()
+			screen.blit(self.animate_move.img, (self.rect.x - camera.offset_x, self.rect.y - camera.offset_y))
 
 	#
 	# ///// ENEMY ACTIONS //////
@@ -359,6 +359,7 @@ class Enemy(pygame.sprite.Sprite):
 		groups.rendered.remove(self)
 		groups.enemies.remove(self) # Needs to change at some point =)
 
+		# Temp sound
 		self.idle_sound.stop()
 		self.captured_sound.play(-1).set_volume(0.80)
 	

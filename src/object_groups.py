@@ -34,7 +34,7 @@ class ObjectGroups:
 		self.enemies = pygame.sprite.Group(entities.enemy)
 
 		# All items in game
-		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper, sprites.ladder, sprites.knife)
+		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper, sprites.ladder, sprites.knife, sprites.glass)
 
 		# Items currently carried
 		self.inventory = pygame.sprite.Group()
@@ -85,7 +85,14 @@ class ObjectGroups:
 			sprites.bookshelf,
 			sprites.monstera,
 			sprites.livingroom_picture,
-			sprites.toilet
+			sprites.toilet,
+			sprites.palm_tree,
+			sprites.mirror,
+			sprites.bathroom_sink,
+			sprites.shower,
+			sprites.dresser,
+			sprites.glass,
+			sprites.bedroom_picture
 		)
 
 		# Assign properties to player

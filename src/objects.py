@@ -10,7 +10,7 @@ class Entities:
 	def __init__(self, window_width, window_height):
 		# Characters
 		self.player = Player('Player', 200, 300, 3, 150)
-		self.enemy = Enemy('Enemy', 175, 200, 3, 200)
+		self.enemy = Enemy('Enemy', 175, 200, 3, 10)
 
 # Every sprite (background, item, prop) in the world and their initial position is here.
 class Sprites:
@@ -41,6 +41,12 @@ class Sprites:
 		self.monstera = Prop('monstera', 380, 790, 2)
 		self.livingroom_picture = Prop('livingroom_picture', 600, 650, 0.90)
 		self.toilet = Prop('toilet', 1070, 300, 1.2)
+		self.palm_tree = Prop('palm_tree', 820, 790, 2)
+		self.bathroom_sink = Prop('bathroom_sink', 1240, 310, 1)
+		self.shower = Prop('shower', 1420, 250, 0.90)
+		self.mirror = Prop('mirror', 1240, 210, 1.2)
+		self.dresser = Prop('dresser', 1460, 800, 0.90)
+		self.bedroom_picture = Prop('bedroom_picture', 1650, 620, 0.90)
 
 		# UI
 		self.interact_box = UIInteractionBox('interact_box', 0, 0, 1)
@@ -48,6 +54,7 @@ class Sprites:
 
 		# Inventory items
 		self.cup = ItemInventory('cup', 1250, 760, 1, player)
+		self.glass = ItemInventory('glass', 1500, 720, 1, player)
 		self.paper = ItemInventory('paper', 700, 400, 1, player)
 		self.knife = ItemInventory('knife', 790, 260, 1, player)
 
