@@ -80,7 +80,12 @@ class ObjectGroups:
 			sprites.cup,
 			sprites.paper,
 			sprites.knife,
-			sprites.bed
+			sprites.bed,
+			sprites.sofa,
+			sprites.bookshelf,
+			sprites.monstera,
+			sprites.livingroom_picture,
+			sprites.toilet
 		)
 
 		# Assign properties to player

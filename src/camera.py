@@ -45,7 +45,10 @@ class Camera(object):
 			self.offset_x += player_screen_x + self.player.rect.w - self.player_margin_right
 		
 		# Prevent camera from scrolling too far left or right
-		self.offset_x = max(self.min_scroll, min(self.offset_x, self.max_scroll))
+		if self.player.rect.y == self.player.min_y:
+			self.offset_x = max(self.min_scroll, min(self.offset_x, self.max_scroll - 400)) # Hardcoded to cut off background on right side
+		else:
+			self.offset_x = max(self.min_scroll, min(self.offset_x, self.max_scroll))
 
 		#### Y-AXIS ####
 

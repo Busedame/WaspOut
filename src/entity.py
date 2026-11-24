@@ -100,7 +100,10 @@ class Player(pygame.sprite.Sprite):
 			self.rect.x += dx * (60 * dt) * self.x_direction # Velocity
 
 			# Blocks player from moving out of world
-			self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
+			if self.rect.y == self.min_y:
+				self.rect.x = max(0, min(self.rect.x, world_width - 400 - self.rect.w)) # Hardcoded to cut off background on right side
+			else:
+				self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
 		
 		if self.check_ladder_collision():
 			if self.moving_up:
@@ -278,7 +281,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.image = self.animate_idle.img
 
 		# Possible spawn locations
-		self.enemy_x_locations = range(50, 1870) # Hardset to fit into CURRENT WORLD DIMENSIONS.
+		self.enemy_x_locations = range(50, 1470) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 		self.enemy_y_locations = range(200, 350) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 
 		# Rectangle size and speed
