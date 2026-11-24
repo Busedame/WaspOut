@@ -91,29 +91,29 @@ class Game():
 					elif event.key == pygame.K_r:
 						self.player.interaction = 'inventory'
 					# Moving right
-					elif event.key == pygame.K_d:
+					elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 						self.player.moving_right = True
 					# Moving left
-					elif event.key == pygame.K_a:
+					elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
 						self.player.moving_left = True
 					# Moving up
-					elif event.key == pygame.K_w:
+					elif event.key == pygame.K_w or event.key == pygame.K_UP:
 						self.player.moving_up = True
 					# Moving down
-					elif event.key == pygame.K_s:
+					elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
 						self.player.moving_down = True
 					# Exit game
 					if event.key == pygame.K_ESCAPE:
 						self.running = False
 
 				if event.type == pygame.KEYUP:
-					if event.key == pygame.K_d:
+					if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 						self.player.moving_right = False
-					if event.key == pygame.K_a:
+					if event.key == pygame.K_a or event.key == pygame.K_LEFT:
 						self.player.moving_left = False
-					if event.key == pygame.K_w:
+					if event.key == pygame.K_w or event.key == pygame.K_UP:
 						self.player.moving_up = False
-					if event.key == pygame.K_s:
+					if event.key == pygame.K_s or event.key == pygame.K_DOWN:
 						self.player.moving_down = False
 
 			# Get delta time
@@ -139,6 +139,8 @@ class Game():
 
 		# Move the camera
 		self.camera.move()
+
+		self.enemy.move()
 
 	# Game render current state
 	def render(self):

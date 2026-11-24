@@ -4,6 +4,7 @@ from animation import Animation
 from item import ItemInventory, ItemWindow
 import string
 import random
+from sound import Sound
 
 # Player class
 class Player(pygame.sprite.Sprite):
@@ -294,8 +295,12 @@ class Enemy(pygame.sprite.Sprite):
 
 		# Boolean indicating if enemy has been captured
 		self.captured = False
-	
 
+		# Sound
+		self.idle_sound = Sound('wasp.wav').sound.play(-1)
+		self.captured_sound = Sound('wasp_caught.wav').sound
+		self.released_sound = Sound('wasp_release.wav').sound
+	
 	#
 	# ///// ENEMY RENDER //////
 	#
@@ -309,6 +314,26 @@ class Enemy(pygame.sprite.Sprite):
 	#
 	# ///// ENEMY ACTIONS //////
 	#
+
+	def move(self):
+		direction = random.choice(['left', 'right', 'up', 'down'])
+
+		if direction == 'left':
+			self.rect.x -= 2
+			if self.rect.x < 50:
+				self.rect.x = 50
+		elif direction == 'right':
+			self.rect.x += 2
+			if self.rect.x > 1470:
+				self.rect.x = 1470
+		elif direction == 'up':
+			self.rect.y -= 1
+			if self.rect.y < 200:
+				self.rect.y = 200
+		elif direction == 'down':
+			self.rect.y += 1
+			if self.rect.y > 350:
+				self.rect.y = 350
 
 	# Calls correct action
 	def action(self, action_type, groups):
@@ -333,6 +358,9 @@ class Enemy(pygame.sprite.Sprite):
 		# Remove from groups
 		groups.rendered.remove(self)
 		groups.enemies.remove(self) # Needs to change at some point =)
+
+		self.idle_sound.stop()
+		self.captured_sound.play(-1).set_volume(0.80)
 	
 	# Handles when enemy is released through window
 	def release(self, player):
@@ -352,3 +380,6 @@ class Enemy(pygame.sprite.Sprite):
 		# Re-add to groups
 		player.groups.rendered.add(self)
 		player.groups.enemies.add(self)
+
+		self.captured_sound.stop()
+		self.released_sound.play(0)
