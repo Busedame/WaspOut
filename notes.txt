@@ -129,3 +129,4 @@ Functionality I need (17.11.26):
 - Window animation
 - Sound effects
 - Make new wasp
+- Fix sound bug where released wasp sound not showing

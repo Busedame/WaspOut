@@ -5,6 +5,7 @@ from item import ItemInventory, ItemWindow
 import string
 import random
 from sound import Sound
+import math
 
 # Player class
 class Player(pygame.sprite.Sprite):
@@ -48,6 +49,9 @@ class Player(pygame.sprite.Sprite):
 		# Interactions
 		self.interaction = None
 		self.enemy_captured = False
+
+		# How many enemies are captured
+		self.score = 0
 
 	#
 	# ///// PLAYER RENDER //////
@@ -102,7 +106,7 @@ class Player(pygame.sprite.Sprite):
 
 			# Blocks player from moving out of world
 			if self.rect.y == self.min_y:
-				self.rect.x = max(0, min(self.rect.x, world_width - 400 - self.rect.w)) # Hardcoded to cut off background on right side
+				self.rect.x = max(0, min(self.rect.x, world_width - 400 - self.rect.w)) # Hardcoded to cut off background on right side only upstairs
 			else:
 				self.rect.x = max(0, min(self.rect.x, world_width - self.rect.w))
 		
@@ -280,14 +284,14 @@ class Enemy(pygame.sprite.Sprite):
 		self.animate_move = Animation(char_type, 'Move', 3, cooldown)
 
 		# Image
-		self.image = self.animate_idle.img
+		self.image = self.animate_move.img
 
 		# Possible spawn locations
 		self.enemy_x_locations = range(50, 1370) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 		self.enemy_y_locations = range(200, 350) # Hardset to fit into CURRENT WORLD DIMENSIONS.
 
 		# Rectangle size and speed
-		self.rect = self.animate_idle.img.get_rect()
+		self.rect = self.animate_move.img.get_rect()
 		self.rect.center = (random.choice(self.enemy_x_locations), random.choice(self.enemy_y_locations)) # Spawn point
 		self.speed = speed
 
@@ -298,9 +302,15 @@ class Enemy(pygame.sprite.Sprite):
 		self.captured = False
 
 		# Sound
-		self.idle_sound = Sound('wasp.wav').sound.play(-1)
+		self.idle_sound = Sound('wasp.wav').sound
+		self.idle_sound.play(-1)
+		self.idle_sound.set_volume(0)
 		self.captured_sound = Sound('wasp_caught.wav').sound
 		self.released_sound = Sound('wasp_release.wav').sound
+
+		# Start position and velocity
+		self.pos = pygame.math.Vector2(self.rect.center) # Start position stored in a Vector2
+		self.velocity = pygame.math.Vector2(self.speed, 0).rotate(random.uniform(0, 360)) # Speed and direction (direction initialized to random angle)
 	
 	#
 	# ///// ENEMY RENDER //////
@@ -315,25 +325,48 @@ class Enemy(pygame.sprite.Sprite):
 	# ///// ENEMY ACTIONS //////
 	#
 
-	def move(self):
-		direction = random.choice(['left', 'right', 'up', 'down'])
+	# Adjusts the volume of wasp idle sound, depending on how close it is to player.
+	def adjust_idle_sound(self, player):
+		if self.captured:
+			return
 
-		if direction == 'left':
-			self.rect.x -= 2
-			if self.rect.x < 50:
-				self.rect.x = 50
-		elif direction == 'right':
-			self.rect.x += 2
-			if self.rect.x > 1470:
-				self.rect.x = 1470
-		elif direction == 'up':
-			self.rect.y -= 1
-			if self.rect.y < 200:
-				self.rect.y = 200
-		elif direction == 'down':
-			self.rect.y += 1
-			if self.rect.y > 350:
-				self.rect.y = 350
+		max_distance_x = 600.0
+		max_distance_y = 400.0
+
+		# abs() gives the difference between the two points but seen as the distance from 0.
+		distance_x = abs(self.rect.centerx - player.rect.centerx)
+		distance_y = abs(self.rect.centery - player.rect.centery)
+
+		# Using Pythagoras to get the correct distance, since both x and y axis must be considered.
+		# Normalize by dividing by max distance: e.g. 300 / 600 = 0.5.
+		normalized_distance = math.sqrt(
+			(distance_x / max_distance_x) ** 2 +
+			(distance_y / max_distance_y) ** 2
+		)
+	
+		# If player is upstairs and close enough to wasp -> play sound at correct volume.
+		if player.rect.y != player.max_y and normalized_distance <= 1.0:
+			volume = 1.0 - normalized_distance
+			self.idle_sound.set_volume(volume)
+		else:
+			self.idle_sound.set_volume(0.0)
+
+	# Moving algorithm to move wasp semi-random.
+	def move(self):
+
+		# Rotate the move direction by a random value between -10 and 10 degrees.
+		self.velocity.rotate_ip(random.uniform(-10, 10))
+		self.pos += self.velocity
+
+		# Keep wasp inside world by changing direction at the edges.
+		if self.pos.x < 50 or self.pos.x > 1370:
+			self.velocity.x *= -1
+			self.pos.x = max(50, min(1370, self.pos.x))
+		if self.pos.y < 100 or self.pos.y > 350:
+			self.velocity.y *= -1
+			self.pos.y = max(100, min(350, self.pos.y))
+
+		self.rect.center = (round(self.pos.x), round(self.pos.y))
 
 	# Calls correct action
 	def action(self, action_type, groups):
@@ -361,7 +394,7 @@ class Enemy(pygame.sprite.Sprite):
 
 		# Temp sound
 		self.idle_sound.stop()
-		self.captured_sound.play(-1).set_volume(0.80)
+		self.captured_sound.play(-1)
 	
 	# Handles when enemy is released through window
 	def release(self, player):
@@ -382,5 +415,10 @@ class Enemy(pygame.sprite.Sprite):
 		player.groups.rendered.add(self)
 		player.groups.enemies.add(self)
 
+		# Change sound
 		self.captured_sound.stop()
+		self.idle_sound.play(-1)
 		self.released_sound.play(0)
+
+		# Add to player score
+		player.score += 1

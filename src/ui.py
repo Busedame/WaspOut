@@ -35,6 +35,27 @@ class UIInventory(UI):
 			screen.blit(item.image, (self.rect.x - item_pos_x_offset, self.rect.y))
 			item_pos_x_offset += self.rect.w
 
+class UIScore(UI):
+
+	def __init__(self, background, x, y, scalar, player):
+
+		super().__init__(background, x, y, scalar)
+		# Initialize font module
+		pygame.font.init()
+
+		# Text
+		self.text_font = pygame.font.SysFont("Arial", 20, True)
+		self.text = None
+		self.color = (238, 170, 0)
+
+		self.player = player
+	
+	def draw(self, screen):
+		screen.blit(self.image, (self.rect.x, self.rect.y))
+		self.text = self.text_font.render(f'Wasps removed: {self.player.score}', True, self.color)
+		screen.blit(self.text, (0, 0))
+	
+
 class UIInteractionBox(UI):
 	def __init__(self, background, x, y, scalar):
 		super().__init__(background, x, y, scalar)

@@ -3,14 +3,14 @@ from entity import Player, Enemy
 from background import Background
 from props import Prop
 from item import ItemInventory, ItemWindow, ItemLadder, Item
-from ui import UIInteractionBox, UIInventory
+from ui import UIInteractionBox, UIInventory, UIScore
 
 # Every entity (player, enemy) in the world and their initial position is here.
 class Entities:
 	def __init__(self, window_width, window_height):
 		# Characters
 		self.player = Player('Player', 200, 300, 3, 150)
-		self.enemy = Enemy('Enemy', 175, 200, 3, 10)
+		self.enemy = Enemy('Enemy', 175, 200, 1, 10)
 
 # Every sprite (background, item, prop) in the world and their initial position is here.
 class Sprites:
@@ -51,6 +51,7 @@ class Sprites:
 		# UI
 		self.interact_box = UIInteractionBox('interact_box', 0, 0, 1)
 		self.inventory = UIInventory('inventory_slot', window_width - 15, window_height - 15, 1)
+		self.score = UIScore('scoreboard', 90, 10, 1, player)
 
 		# Inventory items
 		self.cup = ItemInventory('cup', 1250, 760, 1, player)

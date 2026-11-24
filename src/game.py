@@ -14,7 +14,7 @@ class Game():
 		self.window_height = 480
 
 		# Window init and settings
-		self.screen = pygame.display.set_mode((self.window_width, self.window_height))
+		self.screen = pygame.display.set_mode((self.window_width, self.window_height), pygame.FULLSCREEN)
 		pygame.display.set_caption('Wasp out!')
 
 		# Initialize world
@@ -42,6 +42,12 @@ class Game():
 		# Framerate calculation
 		self.dt = 0
 		self.clock = pygame.time.Clock()
+
+		surf = pygame.image.load('img/Items/cup.png').convert_alpha()
+		#surf = pygame.transform.scale(surf, (32, 32))  # Standard pekerstørrelse
+		cursor = pygame.cursors.Cursor((0, 0), surf)  # (0, 0) er klikkpunktet øverst til venstre
+		pygame.mouse.set_cursor(cursor)
+
 
 	# Game intro loop
 	def intro_loop(self):
@@ -105,8 +111,12 @@ class Game():
 					# Exit game
 					if event.key == pygame.K_ESCAPE:
 						self.running = False
+				
+				elif event.type == pygame.MOUSEBUTTONDOWN:
+					if event.button == 1:
+						print('Clicked')
 
-				if event.type == pygame.KEYUP:
+				elif event.type == pygame.KEYUP:
 					if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 						self.player.moving_right = False
 					if event.key == pygame.K_a or event.key == pygame.K_LEFT:
@@ -118,6 +128,7 @@ class Game():
 
 			# Get delta time
 			self.dt = self.clock.tick(60) / 1000
+
 
 			if DEBUG:
 				debug(self.entities, self.sprites, self.camera)
@@ -141,6 +152,7 @@ class Game():
 		self.camera.move()
 
 		self.enemy.move()
+		self.enemy.adjust_idle_sound(self.player)
 
 	# Game render current state
 	def render(self):
@@ -153,6 +165,9 @@ class Game():
 
 		# Draw the player
 		self.player.draw(self.screen, self.camera)
+
+		# Draw the score
+		self.sprites.score.draw(self.screen)
 
 		# Draw interact_box if any
 		if self.collision:

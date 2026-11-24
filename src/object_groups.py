@@ -34,7 +34,7 @@ class ObjectGroups:
 		self.enemies = pygame.sprite.Group(entities.enemy)
 
 		# All items in game
-		self.items = pygame.sprite.Group(sprites.cup, sprites.window, sprites.paper, sprites.ladder, sprites.knife, sprites.glass)
+		self.items = pygame.sprite.Group(sprites.window, sprites.paper, sprites.ladder, sprites.knife, sprites.glass)
 
 		# Items currently carried
 		self.inventory = pygame.sprite.Group()
@@ -77,7 +77,6 @@ class ObjectGroups:
 			sprites.sink,
 			sprites.flower,
 			sprites.window,
-			sprites.cup,
 			sprites.paper,
 			sprites.knife,
 			sprites.bed,
