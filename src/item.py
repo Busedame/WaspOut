@@ -28,6 +28,20 @@ class ItemInventory(Item):
 		# Boolean to check if item is currently picked up by player
 		self.picked_up = False
 
+		# Index in inventory (valid from 1).
+		self.index = 0
+
+		# Cursor image for this item
+		self.cursor = pygame.cursors.Cursor((0, 0), self.image)
+
+	def select_from_inventory(self):
+		# Set cursor image
+		pygame.mouse.set_cursor(self.cursor)
+	
+	def deselect_from_inventory(self):
+		# Reset cursor image
+		pygame.mouse.set_cursor(pygame.cursors.Cursor())
+
 	# Determines which action to perform
 	def action(self, action_type, groups):
 		if action_type == 'pick up':
@@ -47,7 +61,7 @@ class ItemInventory(Item):
 		print(f'player picked up {self.name}')
 
 	# Method to drop item
-	# Ensures that it visually reappears in world at player's feet, and removes item to inventory
+	# Ensures that it visually reappears in world at player's feet, and removes item from inventory
 	def drop(self, groups):
 		self.picked_up = False
 		self.rect.midbottom = (self.player.rect.centerx, self.player.rect.bottom)
@@ -55,7 +69,8 @@ class ItemInventory(Item):
 		groups.rendered.add(self)
 		groups.items.add(self)
 
-		print(f'player dropped {self.name}')
+		print(f'player dropped {self.name} from index {self.index}')
+		self.index = 0
 
 
 # Used for window items.
@@ -80,10 +95,10 @@ class ItemWindow(Item):
 		self.opened_window_rect.center = (x, y)
 	
 	# Determines which action to perform
-	def action(self, action_type, groups):
-		if action_type == 'open' and not self.opened:
+	def action(self, groups):
+		if not self.opened:
 			self.open_window()
-		elif action_type == 'close' and self.opened:
+		else:
 			self.close_window()
 
 	# Method to open window

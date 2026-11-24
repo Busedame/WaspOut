@@ -53,6 +53,9 @@ class Player(pygame.sprite.Sprite):
 		# How many enemies are captured
 		self.score = 0
 
+		# Selected item from inventory
+		self.selected_item = None
+
 	#
 	# ///// PLAYER RENDER //////
 	#
@@ -200,11 +203,25 @@ class Player(pygame.sprite.Sprite):
 		if self.using_ladder():
 			return
 
-		# interact == pick up, capture, open
-		if self.interaction == 'interact':
+		# Select an item from inventory
+		if isinstance(self.interaction, int):
+			for item in self.inventory:
+				if item.index == self.interaction:
+					item.select_from_inventory()
+					self.selected_item = item
+					break
+
+		if self.interaction == 'deselect':
+			if self.selected_item == None:
+				return
+			self.selected_item.deselect_from_inventory()
+			self.selected_item = None
+
+		# interact == pick up, capture, open/close window
+		elif self.interaction == 'interact':
 
 			if isinstance(target, ItemWindow):
-				target.action('open', self.groups)
+				target.action(self.groups)
 
 			elif isinstance(target, ItemInventory):
 				target.action('pick up', self.groups)
@@ -231,10 +248,6 @@ class Player(pygame.sprite.Sprite):
 						sprite.action('release', self)
 						self.enemy_captured = False
 						return
-			
-			if isinstance(target, ItemWindow):
-				target.action('close', self.groups)
-				return
 
 			for sprite in self.inventory:
 
@@ -301,10 +314,12 @@ class Enemy(pygame.sprite.Sprite):
 		# Boolean indicating if enemy has been captured
 		self.captured = False
 
-		# Sound
+		# Load and play idle sound file
 		self.idle_sound = Sound('wasp.wav').sound
 		self.idle_sound.play(-1)
 		self.idle_sound.set_volume(0)
+
+		# Load additional sound files
 		self.captured_sound = Sound('wasp_caught.wav').sound
 		self.released_sound = Sound('wasp_release.wav').sound
 
@@ -362,6 +377,7 @@ class Enemy(pygame.sprite.Sprite):
 		if self.pos.x < 50 or self.pos.x > 1370:
 			self.velocity.x *= -1
 			self.pos.x = max(50, min(1370, self.pos.x))
+
 		if self.pos.y < 100 or self.pos.y > 350:
 			self.velocity.y *= -1
 			self.pos.y = max(100, min(350, self.pos.y))

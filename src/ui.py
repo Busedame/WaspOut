@@ -19,6 +19,7 @@ class UIInventory(UI):
 
 	def __init__(self, background, x, y, scalar):
 		super().__init__(background, x, y, scalar)
+
 	
 	# For debugging purposes
 	def print_items(self):
@@ -28,12 +29,30 @@ class UIInventory(UI):
 
 	# Draws inventory boxes depending on how many items are present
 	def draw(self, screen):
+		
+		# Used to evenly distribute the inventory slots dynamically
 		item_pos_x_offset = 0
 
+		# Index the inventory items
+		index = len(self.inventory)
+
 		for item in self.inventory:
+			
+			# Create text based on index value
+			self.text = self.text_font.render(f'{index}', True, (255, 255, 255))
+
+			# Render inventory slot image, item image and index text.
 			screen.blit(self.image, (self.rect.x - item_pos_x_offset, self.rect.y))
 			screen.blit(item.image, (self.rect.x - item_pos_x_offset, self.rect.y))
+			screen.blit(self.text, (self.rect.right - 6 - item_pos_x_offset, self.rect.bottom - 10))
+
+			# Increase offset to place next slot correctly
 			item_pos_x_offset += self.rect.w
+
+			# Update index and also store in corresponding item
+			item.index = index
+			index -= 1
+
 
 class UIScore(UI):
 
@@ -51,7 +70,7 @@ class UIScore(UI):
 		self.player = player
 	
 	def draw(self, screen):
-		screen.blit(self.image, (self.rect.x, self.rect.y))
+		#screen.blit(self.image, (self.rect.x, self.rect.y))
 		self.text = self.text_font.render(f'Wasps removed: {self.player.score}', True, self.color)
 		screen.blit(self.text, (0, 0))
 	
@@ -90,7 +109,7 @@ class UIInteractionBox(UI):
 		elif target.opened and player.enemy_captured:
 			self.text = self.text_font.render(f'release wasp: r', True, (255, 255, 255))
 		else:
-			self.text = self.text_font.render(f'close {target.name}: r', True, (255, 255, 255))
+			self.text = self.text_font.render(f'close {target.name}: e', True, (255, 255, 255))
 
 	# Super class (Sprite) instance draws the textbox
 	# UI class (self) instance draws the text

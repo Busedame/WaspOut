@@ -14,7 +14,7 @@ class Game():
 		self.window_height = 480
 
 		# Window init and settings
-		self.screen = pygame.display.set_mode((self.window_width, self.window_height), pygame.FULLSCREEN)
+		self.screen = pygame.display.set_mode((self.window_width, self.window_height))
 		pygame.display.set_caption('Wasp out!')
 
 		# Initialize world
@@ -43,13 +43,8 @@ class Game():
 		self.dt = 0
 		self.clock = pygame.time.Clock()
 
-		surf = pygame.image.load('img/Items/cup.png').convert_alpha()
-		#surf = pygame.transform.scale(surf, (32, 32))  # Standard pekerstørrelse
-		cursor = pygame.cursors.Cursor((0, 0), surf)  # (0, 0) er klikkpunktet øverst til venstre
-		pygame.mouse.set_cursor(cursor)
 
-
-	# Game intro loop
+	# Temp game intro loop
 	def intro_loop(self):
 		while self.intro:
 
@@ -70,17 +65,16 @@ class Game():
 			# Caps the runtime speed to not kill CPU
 			self.clock.tick(60)
 
+
+
 	# Game main loop
 	def main_loop(self):
 
 		while self.running:
 
+			# Update current positions/actions and render state
 			self.update()
 			self.render()
-
-			#if not self.groups.enemies.sprites():
-			#	self.end_game()
-			#	self.running = False
 
 			# Check for events
 			for event in pygame.event.get():
@@ -90,12 +84,28 @@ class Game():
 		
 				# Player actions
 				if event.type == pygame.KEYDOWN:
-					# Picking up item, capturing enemy or opening window
+
+					## INTERACTIONS ##
+
+					# Picking up item, capturing enemy or opening/closing window
 					if event.key == pygame.K_e:
 						self.player.interaction = 'interact'
-					# Dropping item, releasing enemy or closing window
+					# Dropping item or releasing enemy
 					elif event.key == pygame.K_r:
 						self.player.interaction = 'inventory'
+					
+					## INVENTORY ##
+					elif event.key == pygame.K_1:
+						self.player.interaction = 1
+					elif event.key == pygame.K_2:
+						self.player.interaction = 2
+					elif event.key == pygame.K_2:
+						self.player.interaction = 3
+					elif event.key == pygame.K_2:
+						self.player.interaction = 4
+					
+					## MOVEMENT ##
+				
 					# Moving right
 					elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 						self.player.moving_right = True
@@ -112,10 +122,12 @@ class Game():
 					if event.key == pygame.K_ESCAPE:
 						self.running = False
 				
+				### TBD: MOUSE BUTTONS ###
 				elif event.type == pygame.MOUSEBUTTONDOWN:
-					if event.button == 1:
-						print('Clicked')
+					if event.button == 3:
+						self.player.interaction = 'deselect'
 
+				### KEY RELEASES ###
 				elif event.type == pygame.KEYUP:
 					if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 						self.player.moving_right = False
@@ -128,7 +140,6 @@ class Game():
 
 			# Get delta time
 			self.dt = self.clock.tick(60) / 1000
-
 
 			if DEBUG:
 				debug(self.entities, self.sprites, self.camera)
@@ -144,13 +155,15 @@ class Game():
 		if self.player.moving_down or self.player.moving_up \
 			or self.player.moving_right or self.player.moving_left:
 			self.player.move(self.window_width * 3, self.dt)
-	
+
+		# Handle player interaction
 		if self.player.interaction:
 			self.player.handle_interaction(self.collision)
 
 		# Move the camera
 		self.camera.move()
 
+		# Move the enemy and synchronize sound
 		self.enemy.move()
 		self.enemy.adjust_idle_sound(self.player)
 
@@ -181,21 +194,3 @@ class Game():
 
 		if self.player.interaction:
 			self.player.interaction = None
-
-	# Start level over depending on win or lose
-	def end_game(self):
-		while self.outro:
-
-			# Draw logo
-			#self.sprites.logo.draw_end_scene(self.screen, 300, 100)
-
-			# Render all intro images
-			pygame.display.flip()
-
-			for event in pygame.event.get():
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_ESCAPE:
-						self.outro = False
-	
-			# Caps the runtime speed to not kill CPU
-			self.clock.tick(60)
