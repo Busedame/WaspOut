@@ -206,7 +206,7 @@ class Player(pygame.sprite.Sprite):
 		# Select an item from inventory
 		if isinstance(self.interaction, int):
 			for item in self.inventory:
-				if item.index == self.interaction:
+				if item.index == self.interaction and isinstance(item, ItemInventory):
 					item.select_from_inventory()
 					self.selected_item = item
 					break
